@@ -94,7 +94,8 @@ def run_multi_restaurant(script_dir: str) -> None:
     if not os.path.exists(backup_script):
         raise FileNotFoundError(f"未找到分析脚本：{backup_script}")
 
-    restaurants: List[Dict[str, Any]] = []
+    # 用字典先聚合，再在最后转成列表输出
+    restaurants: Dict[str, Dict[str, Any]] = {}
     output_root = os.path.join(script_dir, "output")
     ensure_dir(output_root)
 
@@ -126,15 +127,16 @@ def run_multi_restaurant(script_dir: str) -> None:
             )
         except subprocess.CalledProcessError as e:
             print(f"❌ 门店 {rest_name} 分析脚本执行失败，已跳过。错误：{e}")
-            continue
+            # 不直接 continue：允许复用该门店已有的 output 周期，仍然生成完整 index
 
-        # 分析脚本已将宽表/分析表/report.json 写入 output/<门店>/<数据段>/，直接使用该目录
+        # 分析脚本会将宽表/分析表/report.json 写入 output/<门店>/<数据段>/。
+        # 业务端需要“历史多个周期都可下拉查看”，所以这里要收录该门店 output 下的所有周期。
         target_base = os.path.join(output_root, rest_name)
         if not os.path.isdir(target_base):
             print(f"⚠️ 门店 {rest_name} 未生成 output 子目录，已跳过。")
             continue
 
-        # 取该门店下最新一次运行的输出目录（按子目录 mtime）
+        # 收集该门店所有周期 report.json
         subdirs = [
             d
             for d in os.listdir(target_base)
@@ -143,59 +145,54 @@ def run_multi_restaurant(script_dir: str) -> None:
         if not subdirs:
             print(f"⚠️ 门店 {rest_name} 的 output 下无数据周期目录，已跳过。")
             continue
-        latest_subdir = max(
-            subdirs,
-            key=lambda d: os.path.getmtime(os.path.join(target_base, d)),
-        )
-        target_dir = os.path.join(target_base, latest_subdir)
-        report_json_path = os.path.join(target_dir, "report.json")
 
-        if not os.path.exists(report_json_path):
-            print(f"⚠️ 门店 {rest_name} 未找到 report.json（路径：{report_json_path}），已跳过。")
-            continue
-
-        # 读取该次运行的 report 元信息
-        meta = load_report_meta(report_json_path)
-        data_range_text = meta.get("dataRange", "")
-        range_key = meta.get("rangeKey") or parse_date_range(data_range_text)
-
-        # 文件名由脚本写入 meta，无需移动文件
-        wide_file_name = meta.get("wideFile") or ""
-        analysis_file_name = meta.get("reportFile") or ""
-
-        restaurant_entry = next(
-            (r for r in restaurants if r["id"] == rest_name),
-            None,
-        )
+        restaurant_entry = restaurants.get(rest_name)
         if restaurant_entry is None:
-            restaurant_entry = {
-                "id": rest_name,
-                "name": rest_name,
-                "periods": [],
-            }
-            restaurants.append(restaurant_entry)
+            restaurant_entry = {"id": rest_name, "name": rest_name, "periods": []}
+            restaurants[rest_name] = restaurant_entry
 
-        restaurant_entry["periods"].append(
-            {
+        period_by_key: Dict[str, Dict[str, Any]] = {}
+        for subdir in subdirs:
+            target_dir = os.path.join(target_base, subdir)
+            report_json_path = os.path.join(target_dir, "report.json")
+            if not os.path.exists(report_json_path):
+                continue
+
+            meta = load_report_meta(report_json_path)
+            data_range_text = meta.get("dataRange", "")
+            range_key = meta.get("rangeKey") or parse_date_range(data_range_text)
+
+            wide_file_name = meta.get("wideFile") or ""
+            analysis_file_name = meta.get("reportFile") or ""
+
+            # 用文件 mtime 做排序依据（新周期更靠前）
+            period_entry: Dict[str, Any] = {
                 "rangeKey": range_key,
                 "dataRange": data_range_text,
-                "reportPath": os.path.relpath(
-                    report_json_path, script_dir
-                ),
+                "reportPath": os.path.relpath(report_json_path, script_dir),
                 "wideFile": wide_file_name,
                 "reportFile": analysis_file_name,
+                "__mtime": os.path.getmtime(report_json_path),
             }
-        )
+            period_by_key[range_key] = period_entry
 
-        print(
-            f"✅ 门店 {rest_name} 完成，本期数据范围：{data_range_text or '未知'} → 归档目录：{target_dir}"
-        )
+        # 倒序：越新的周期越靠前
+        periods_sorted = sorted(period_by_key.values(), key=lambda x: x["__mtime"], reverse=True)
+        for p in periods_sorted:
+            p.pop("__mtime", None)
+        restaurant_entry["periods"] = periods_sorted
+
+        if restaurant_entry["periods"]:
+            newest = restaurant_entry["periods"][0]
+            print(f"✅ 门店 {rest_name} 已收录 {len(restaurant_entry['periods'])} 个周期，最新：{newest.get('dataRange','未知')}")
+        else:
+            print(f"⚠️ 门店 {rest_name} 未找到可用 report.json 周期，已跳过周期索引。")
 
     # 生成 output/index.json 供前端使用
     index_path = os.path.join(output_root, "index.json")
     index_payload: Dict[str, Any] = {
         "generatedAt": datetime.now().isoformat(),
-        "restaurants": restaurants,
+        "restaurants": list(restaurants.values()),
     }
     with open(index_path, "w", encoding="utf-8") as f:
         json.dump(index_payload, f, ensure_ascii=False, indent=2)
