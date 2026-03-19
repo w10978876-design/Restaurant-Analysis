@@ -1,0 +1,18 @@
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Data & outputs (often large / private)
+data/
+output/
+
+# Frontend build artifacts
+dashboard/node_modules/
+dashboard/dist/
+dashboard/.vite/
+
+# Local editor
+.vscode/
+.cursor/

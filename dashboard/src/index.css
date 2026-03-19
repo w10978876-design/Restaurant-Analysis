@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@theme {
+  /* 语义色：蓝(稳健/增长)、紫(品牌)、粉(警告/风险)、橙(行动建议) */
+  --color-brand-blue: #3b82f6;
+  --color-brand-purple: #8b5cf6;
+  --color-brand-pink: #ec4899;
+  --color-brand-orange: #f97316;
+  --color-glass-bg: rgba(255, 255, 255, 0.72);
+  --color-glass-border: rgba(255, 255, 255, 0.4);
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+  background: linear-gradient(135deg, #eef2ff 0%, #f9fafb 50%, #fce7f3 100%);
+  color: #111827;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* 呼吸灯 */
+@keyframes breathe {
+  0%, 100% { opacity: 1; box-shadow: 0 0 12px rgba(59, 130, 246, 0.5); }
+  50% { opacity: 0.85; box-shadow: 0 0 20px rgba(59, 130, 246, 0.7); }
+}
+
+.animate-breathe {
+  animation: breathe 2.5s ease-in-out infinite;
+}

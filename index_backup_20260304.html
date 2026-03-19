@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>餐饮门店经营仪表板</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+  <div class="page">
+    <header class="page-header">
+      <div class="header-main">
+        <div class="title-block">
+          <h1>餐饮门店经营仪表板</h1>
+          <p class="subtitle">基于宽表与 8 个分析模块的单页洞察</p>
+        </div>
+        <div class="filter-bar">
+          <span class="filter-label">日期范围</span>
+          <input type="date" id="date-start" class="filter-input" />
+          <span class="filter-sep">至</span>
+          <input type="date" id="date-end" class="filter-input" />
+          <button id="apply-filter" class="btn-primary">应用筛选</button>
+        </div>
+      </div>
+      <p id="data-range-text" class="data-range-text"></p>
+    </header>
+
+    <main class="page-main">
+      <!-- AI 经营洞察 -->
+      <section class="module insight-hero" id="module-insight">
+        <div class="insight-hero-header">
+          <div class="insight-hero-title">AI 经营洞察 · Gemini Insight</div>
+          <div class="insight-hero-meta" id="insight-report-file"></div>
+        </div>
+        <div class="insight-hero-body" id="insight-body"></div>
+      </section>
+      <!-- 核心 KPI 卡片 -->
+      <section class="module" id="module-kpi">
+        <div class="module-header">
+          <h2>核心指标</h2>
+          <p>总览本期门店的收入、客流与流失概况。</p>
+        </div>
+        <div class="kpi-row" id="kpi-row"></div>
+      </section>
+
+      <!-- 销售趋势模块 -->
+      <section class="module" id="module-sales">
+        <div class="module-header">
+          <h2>销售趋势</h2>
+          <p>按月与按周观察销售额与订单数的变化趋势。</p>
+        </div>
+        <div class="module-body two-col">
+          <div class="card">
+            <div class="card-header">月度销售与订单趋势</div>
+            <div class="card-body"><div id="chart-sales-month" class="chart"></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header">周度销售额</div>
+            <div class="card-body"><div id="chart-sales-week" class="chart"></div></div>
+          </div>
+        </div>
+        <div class="module-footer" id="sales-conclusion"></div>
+        <div class="module-tables">
+          <button class="btn-secondary" data-toggle="sales-kpi-table">核心指标矩阵</button>
+          <button class="btn-secondary" data-toggle="sales-month-table">月度趋势与 MoM</button>
+          <button class="btn-secondary" data-toggle="sales-week-table">周度趋势与 WoW</button>
+          <div id="sales-kpi-table" class="table-section" hidden></div>
+          <div id="sales-month-table" class="table-section"></div>
+          <div id="sales-week-table" class="table-section" hidden></div>
+        </div>
+      </section>
+
+      <!-- 时段交叉模块 -->
+      <section class="module" id="module-time">
+        <div class="module-header">
+          <h2>时段交叉分析</h2>
+          <p>按「星期 × 时段」分析客流与营收高峰与低谷。</p>
+        </div>
+        <div class="card">
+          <div class="card-header">星期 × 时段热力图</div>
+          <div class="card-body"><div id="chart-time-heat" class="chart"></div></div>
+        </div>
+        <div class="module-body two-col" id="time-top-bottom"></div>
+        <div class="module-tables">
+          <button class="btn-secondary" data-toggle="time-table">查看星期×时段明细</button>
+          <div id="time-table" class="table-section" hidden></div>
+        </div>
+      </section>
+
+      <!-- 用户分层模块 -->
+      <section class="module" id="module-user">
+        <div class="module-header">
+          <h2>用户分层（RFM）</h2>
+          <p>从新客到高价值忠诚客，洞察不同层级的贡献与行为。</p>
+        </div>
+        <div class="kpi-row" id="user-seg-cards"></div>
+        <div class="module-body two-col">
+          <div class="card">
+            <div class="card-header">各层级时段分布</div>
+            <div class="card-body"><div id="chart-user-time" class="chart"></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header">各层级优惠响应</div>
+            <div class="card-body"><div id="chart-user-discount" class="chart"></div></div>
+          </div>
+        </div>
+        <div class="module-tables">
+          <button class="btn-secondary" data-toggle="user-summary-table">用户分层汇总</button>
+          <button class="btn-secondary" data-toggle="user-detail-table">分层用户明细</button>
+          <div id="user-summary-table" class="table-section"></div>
+          <div id="user-detail-table" class="table-section" hidden></div>
+        </div>
+      </section>
+
+      <!-- 菜品表现模块 -->
+      <section class="module" id="module-dish">
+        <div class="module-header">
+          <h2>菜品表现</h2>
+          <p>识别畅销菜与风险菜，结合备注优化菜单与出餐。</p>
+        </div>
+        <div class="module-body two-col">
+          <div class="card">
+            <div class="card-header">畅销菜 Top 10</div>
+            <div class="card-body" id="dish-top-list"></div>
+          </div>
+          <div class="card">
+            <div class="card-header">风险菜品（高退菜率）</div>
+            <div class="card-body" id="dish-risk-list"></div>
+          </div>
+        </div>
+        <div class="module-tables">
+          <button class="btn-secondary" data-toggle="dish-summary-table">菜品汇总</button>
+          <button class="btn-secondary" data-toggle="dish-risk-table">风险菜品明细</button>
+          <div id="dish-summary-table" class="table-section" hidden></div>
+          <div id="dish-risk-table" class="table-section" hidden></div>
+        </div>
+      </section>
+
+      <!-- 员工表现模块 -->
+      <section class="module" id="module-staff">
+        <div class="module-header">
+          <h2>员工表现</h2>
+          <p>对比员工销售额、退菜率与优惠率，识别优秀与需辅导员工。</p>
+        </div>
+        <div class="card">
+          <div class="card-header">员工销售表现</div>
+          <div class="card-body"><div id="chart-staff-sales" class="chart"></div></div>
+        </div>
+        <div class="module-tables">
+          <button class="btn-secondary" data-toggle="staff-table">员工汇总明细</button>
+          <div id="staff-table" class="table-section" hidden></div>
+        </div>
+      </section>
+
+      <!-- 优惠分析模块 -->
+      <section class="module" id="module-discount">
+        <div class="module-header">
+          <h2>优惠分析</h2>
+          <p>从总体占比到类型与原因，评估促销对营收与客群的影响。</p>
+        </div>
+        <div class="module-body two-col">
+          <div class="card">
+            <div class="card-header">总体优惠概览</div>
+            <div class="card-body" id="discount-kpi"></div>
+          </div>
+          <div class="card">
+            <div class="card-header">优惠类型金额占比</div>
+            <div class="card-body"><div id="chart-discount-type" class="chart"></div></div>
+          </div>
+        </div>
+        <div class="module-tables">
+          <button class="btn-secondary" data-toggle="discount-reason-table">折扣原因分布</button>
+          <button class="btn-secondary" data-toggle="discount-type-reason-table">优惠类型+折扣原因分布</button>
+          <div id="discount-reason-table" class="table-section" hidden></div>
+          <div id="discount-type-reason-table" class="table-section" hidden></div>
+        </div>
+      </section>
+
+      <!-- 流失订单分析模块 -->
+      <section class="module" id="module-lost">
+        <div class="module-header">
+          <h2>流失订单分析</h2>
+          <p>观察流失订单按月变化与备注高频词，辅助改进履约体验。</p>
+        </div>
+        <div class="module-body two-col">
+          <div class="card">
+            <div class="card-header">按月流失订单数</div>
+            <div class="card-body"><div id="chart-lost-month" class="chart"></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header">流失订单备注高频词</div>
+            <div class="card-body" id="lost-remark-tags"></div>
+          </div>
+        </div>
+        <div class="module-tables">
+          <button class="btn-secondary" data-toggle="lost-week-table">按周流失订单明细</button>
+          <div id="lost-week-table" class="table-section" hidden></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>
