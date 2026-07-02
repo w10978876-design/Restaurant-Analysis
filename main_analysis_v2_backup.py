@@ -30,26 +30,33 @@ FIELD_CONFIG = {
     },
     "sales": {
         "file": "销售明细.xlsx",
+        # 夕佳悦等新导出可能文件名为「菜品销售明细.xlsx」，表头在第 2 行；紫竹等仍用「销售明细.xlsx」
+        "file_candidates": ["销售明细.xlsx", "菜品销售明细.xlsx"],
         "mapping": {
-            "id": ["订单编号", "订单号"],
-            "dish": ["菜品名称", "项目名称"],
+            "id": ["订单编号", "订单号", "业务单号"],
+            # 「菜品名称」勿放在「关联菜品名称」之前，否则子串误匹配；新表「品项名称」优先
+            "dish": ["品项名称", "菜品名称", "项目名称", "关联菜品名称"],
             "qty": ["销售数量", "数量"],
-            "price": ["销售额", "金额"],
-            "staff": ["收银员", "点菜员", "服务员"],
-            "remark": ["备注"],
-            "type": ["用餐方式", "订单类型"],
+            # 旧：销售额（元）；新：销售金额(元)、品项收入(元)
+            "price": ["销售额", "销售金额", "品项收入", "金额"],
+            "staff": ["收银员", "点菜员", "服务员", "下单人"],
+            "remark": ["备注", "单品备注"],
+            # 新表常见：订单分类、销售方式、订单来源等
+            "type": ["用餐方式", "订单类型", "订单分类", "经营模式", "销售方式"],
         },
     },
     "refunds": {
         "file": "退菜明细.xlsx",
         "mapping": {
             "id": ["订单编号", "订单号"],
-            "dish": ["菜品名称"],
-            "qty": ["销售数量", "数量"],
-            "price": ["销售额", "金额"],
-            "staff": ["操作员", "操作人", "收银员"],
-            "remark": ["退菜原因", "备注"],
-            "time": ["退菜时间", "时间"],
+            "dish": ["品项名称", "菜品名称", "关联菜品名称"],
+            # 新表同时存在「销售数量」与「退菜数量」，必须优先匹配退菜数量（见 find_actual_column 关键词优先）
+            "qty": ["退菜数量", "销售数量", "数量"],
+            # 新表：退菜金额(元)；旧表：销售额（元）
+            "price": ["退菜金额", "销售额", "销售金额", "金额"],
+            "staff": ["操作员", "操作人", "收银员", "点菜员", "下单人"],
+            "remark": ["退菜原因", "备注", "单品备注"],
+            "time": ["退菜时间", "接单/结账/退菜时间", "接单/结账时间", "时间"],
         },
     },
     "orders": {
@@ -95,12 +102,197 @@ def clean_id(s):
 
 
 def find_actual_column(columns, keywords):
-    for col in columns:
-        clean_col = str(col).strip().replace("(", "（").replace(")", "）")
-        for kw in keywords:
+    """
+    按「关键词列表顺序」优先匹配列名（关键词越具体应越靠前），避免新表中多列同时满足宽泛词时误匹配。
+    例如退菜明细同时有「销售数量」与「退菜数量」时，qty 映射必须把「退菜数量」写在前面。
+    """
+    cols_list = list(columns)
+    for kw in keywords:
+        for col in cols_list:
+            clean_col = str(col).strip().replace("(", "（").replace(")", "）")
             if kw in clean_col:
                 return col
     return None
+
+
+def _resolve_required_file(cfg: dict) -> str:
+    """必选表路径：支持 file_candidates（任选一个存在的文件）。"""
+    cands = cfg.get("file_candidates")
+    if cands:
+        for name in cands:
+            if os.path.exists(name):
+                return name
+        raise FileNotFoundError(
+            f"找不到文件（尝试过：{', '.join(cands)}）"
+        )
+    path = cfg["file"]
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"找不到文件：{path}")
+    return path
+
+
+def _read_kwargs_for_sales(path: str) -> dict:
+    """
+    同名「菜品销售明细.xlsx」可能对应两种导出（勿仅靠文件名判断）：
+
+    - **新版**（夕佳悦）：工作表「品项销售明细」，业务列名在第 2 行（header=1）。
+    - **旧版列结构但文件名仍是菜品销售明细**（紫竹常见）：工作表如「已销售」，
+      首行即为列名（header=0），与「销售明细.xlsx」一致。
+
+    若误对新版使用 header=0 或对旧版使用 header=1，会导致列错位，
+    进而出现菜品共现、备注洞察、优惠菜品、员工表现等模块异常或全空。
+    """
+    base = os.path.basename(path)
+    if base != "菜品销售明细.xlsx":
+        return {}
+    try:
+        xl = pd.ExcelFile(path)
+        names = xl.sheet_names
+        if "品项销售明细" in names:
+            # 同 sheet 名可能首行即列名（2026-05 起）或第二行为列名（旧模板）
+            probe = pd.read_excel(path, sheet_name="品项销售明细", header=0, nrows=0)
+            cols = [str(c) for c in probe.columns]
+            has_header_row0 = any(
+                any(k in c for k in ("品项名称", "菜品名称", "订单号", "订单编号", "销售数量"))
+                for c in cols
+            )
+            return {
+                "sheet_name": "品项销售明细",
+                "header": 0 if has_header_row0 else 1,
+            }
+        # 旧版导出：常见 sheet「已销售」，列名在第一行
+        if "已销售" in names:
+            return {"sheet_name": "已销售", "header": 0}
+        first = names[0]
+        probe = pd.read_excel(path, sheet_name=first, nrows=0)
+        cols = [str(c) for c in probe.columns]
+        if any("菜品名称" in c for c in cols) and any(
+            "销售数量" in c or "销售额" in c for c in cols
+        ):
+            return {"sheet_name": first, "header": 0}
+        # 首行无有效列名（模板占位），列名在下一行
+        if all(str(c).startswith("Unnamed") for c in cols if str(c) != ""):
+            return {"sheet_name": first, "header": 1}
+        return {"sheet_name": first, "header": 0}
+    except Exception:
+        return {}
+
+
+def _parse_visitor_dates(series: pd.Series) -> pd.Series:
+    """解析游客量表日期，兼容「2026 年 5 月 1 日」等中文格式。"""
+    s = series.astype(str).str.strip()
+    cn = s.str.extract(r"(\d{4})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日", expand=True)
+    out = pd.Series(pd.NaT, index=s.index, dtype="datetime64[ns]")
+    mask = cn[0].notna()
+    if mask.any():
+        iso = (
+            cn[0].loc[mask].astype(int).astype(str)
+            + "-"
+            + cn[1].loc[mask].astype(int).astype(str).str.zfill(2)
+            + "-"
+            + cn[2].loc[mask].astype(int).astype(str).str.zfill(2)
+        )
+        out.loc[mask] = pd.to_datetime(iso, errors="coerce")
+    rest = ~mask
+    if rest.any():
+        out.loc[rest] = pd.to_datetime(s.loc[rest], errors="coerce")
+    return out.dt.normalize()
+
+
+def _read_kwargs_for_pay(path: str) -> dict:
+    """
+    「支付明细.xlsx」导出格式不一：
+    - 夕佳悦等：首行即列名（header=0）；
+    - 紫竹等：前两行为标题/筛选说明，列名在第三行（header=2）。
+    """
+    if os.path.basename(path) != "支付明细.xlsx":
+        return {}
+    try:
+        for header in range(5):
+            probe = pd.read_excel(path, header=header, nrows=0)
+            cols = {str(c).strip() for c in probe.columns}
+            if "交易时间" in cols and any("交易金额" in c for c in cols):
+                return {"header": header}
+        return {}
+    except Exception:
+        return {}
+
+
+def _load_visitor_dataframe(
+    filepath: str,
+    period_start: pd.Timestamp | None = None,
+    period_end: pd.Timestamp | None = None,
+) -> pd.DataFrame:
+    """读取进馆游客量（多 Sheet / 多表头模板）。"""
+    if not os.path.exists(filepath):
+        return pd.DataFrame(columns=["date", "visitors"])
+    try:
+        xls = pd.ExcelFile(filepath)
+    except Exception:
+        return pd.DataFrame(columns=["date", "visitors"])
+
+    best_df = None
+    best_score = -1
+    for sheet in xls.sheet_names:
+        for header in (0, 1):
+            try:
+                df_s = pd.read_excel(filepath, sheet_name=sheet, header=header)
+            except Exception:
+                continue
+            col_date = find_actual_column(df_s.columns, ["日期"])
+            col_vis = find_actual_column(df_s.columns, ["进馆人数", "人数"])
+            if col_date is None or col_vis is None:
+                continue
+            tmp = pd.DataFrame(
+                {
+                    "date": df_s[col_date],
+                    "visitors": pd.to_numeric(df_s[col_vis], errors="coerce"),
+                }
+            )
+            tmp = tmp.dropna(subset=["visitors"])
+            dates = _parse_visitor_dates(tmp["date"])
+            tmp = tmp.copy()
+            tmp["date"] = dates
+            tmp = tmp.dropna(subset=["date"])
+            valid = len(tmp)
+            if valid == 0:
+                continue
+            if period_start is not None and period_end is not None:
+                in_period = tmp[
+                    (tmp["date"] >= period_start) & (tmp["date"] <= period_end)
+                ]
+                score = len(in_period) * 1000 + valid
+            else:
+                max_d = tmp["date"].max()
+                score = valid + (int(max_d.timestamp()) if pd.notna(max_d) else 0)
+            if score > best_score:
+                best_score = score
+                best_df = tmp
+    if best_df is None:
+        return pd.DataFrame(columns=["date", "visitors"])
+    return best_df.dropna(subset=["date"])
+
+
+def _read_kwargs_for_groupon(path: str) -> dict:
+    """
+    「团购核销明细.xlsx」导出格式不一：
+    - 夕佳悦等：首行即列名（header=0）；
+    - 紫竹等：前两行为标题/筛选说明，列名在第三行（header=2）。
+    """
+    base = os.path.basename(path)
+    if base not in ("团购核销明细.xlsx", "团购核销明细表.xlsx"):
+        return {}
+    try:
+        for header in range(5):
+            probe = pd.read_excel(path, header=header, nrows=0)
+            cols = {str(c).strip() for c in probe.columns}
+            if "团购平台" in cols and "核销/撤销时间" in cols and (
+                "订单编号" in cols or "订单号" in cols
+            ):
+                return {"header": header}
+        return {}
+    except Exception:
+        return {}
 
 
 def classify_daypart(dt):
@@ -182,11 +374,14 @@ pd.DataFrame.to_excel = _percent_to_excel  # type: ignore[assignment]
 def load_all_data():
     dfs = {}
     for key, cfg in FIELD_CONFIG.items():
-        path = cfg["file"]
-        if not os.path.exists(path):
-            raise FileNotFoundError(f"找不到文件：{path}")
+        path = _resolve_required_file(cfg)
+        extra_read = {}
+        if key == "sales":
+            extra_read = _read_kwargs_for_sales(path)
+        elif key == "pay":
+            extra_read = _read_kwargs_for_pay(path)
         # 先用前几行推断列名
-        raw = pd.read_excel(path, nrows=5)
+        raw = pd.read_excel(path, nrows=5, **extra_read)
         rename_dict = {}
         for internal, kws in cfg["mapping"].items():
             col = find_actual_column(raw.columns, kws)
@@ -194,6 +389,7 @@ def load_all_data():
                 rename_dict[col] = internal
         # 读全量
         read_kwargs = {}
+        read_kwargs.update(extra_read)
         if any(v == "id" for v in rename_dict.values()):
             id_cols = [k for k, v in rename_dict.items() if v == "id"]
             read_kwargs["dtype"] = {c: str for c in id_cols}
@@ -211,10 +407,31 @@ def load_all_data():
     return dfs
 
 
+def _read_kwargs_for_soldout(path: str) -> dict:
+    """
+    「菜品沽清售罄统计.xlsx」导出格式不一：
+    - 夕佳悦等：首行即列名（header=0）；
+    - 紫竹等：前两行为标题/筛选说明，列名在第三行（header=2）。
+    须用「精确列名」判断，避免筛选行文案含「菜品名称」字样导致误匹配。
+    """
+    if os.path.basename(path) != "菜品沽清售罄统计.xlsx":
+        return {}
+    try:
+        for header in range(4):
+            probe = pd.read_excel(path, header=header, nrows=0)
+            cols = {str(c).strip() for c in probe.columns}
+            if {"日期", "菜品名称", "沽清时间"}.issubset(cols):
+                return {"header": header}
+        return {}
+    except Exception:
+        return {}
+
+
 def load_optional_table(
     filename: str,
     mapping: dict,
     numeric_keys: list | None = None,
+    read_kwargs: dict | None = None,
 ):
     """
     读取可选源表：若文件不存在则返回空 DataFrame，不影响主流程。
@@ -223,13 +440,13 @@ def load_optional_table(
     if not os.path.exists(filename):
         return pd.DataFrame(columns=list(mapping.keys()))
 
-    raw = pd.read_excel(filename, nrows=5)
+    read_kwargs = read_kwargs or {}
+    raw = pd.read_excel(filename, nrows=5, **read_kwargs)
     rename_dict = {}
     for internal, kws in mapping.items():
         col = find_actual_column(raw.columns, kws)
         if col is not None:
             rename_dict[col] = internal
-    read_kwargs = {}
     df = pd.read_excel(filename, **read_kwargs)
     df = df.rename(columns=rename_dict)
     # 补齐缺失字段
@@ -271,9 +488,10 @@ def run_catering_analysis():
     _groupon_file = "团购核销明细表.xlsx" if os.path.exists("团购核销明细表.xlsx") else "团购核销明细.xlsx"
     df_groupon = load_optional_table(
         _groupon_file,
+        read_kwargs=_read_kwargs_for_groupon(_groupon_file),
         mapping={
             "platform": ["团购平台"],
-            "project_name": ["平台项目名称"],
+            "project_name": ["平台项目名称", "项目名称"],
             "cashier_project": ["收银项目名称"],
             "coupon_code": ["团购券码"],
             "time": ["核销/撤销时间"],
@@ -289,8 +507,10 @@ def run_catering_analysis():
         numeric_keys=["qty", "price_market", "price_group", "price_customer"],
     )
 
+    _soldout_file = "菜品沽清售罄统计.xlsx"
     df_soldout = load_optional_table(
-        "菜品沽清售罄统计.xlsx",
+        _soldout_file,
+        read_kwargs=_read_kwargs_for_soldout(_soldout_file),
         mapping={
             "date": ["日期"],
             "dish_code": ["菜品编码"],
@@ -324,38 +544,6 @@ def run_catering_analysis():
             break
     if _visitors_file is None:
         _visitors_file = "进馆游客量表.xlsx"  # 不存在则后续返回空表
-    df_visitors = load_optional_table(
-        _visitors_file,
-        mapping={
-            "date": ["日期"],
-            "visitors": ["人数", "进馆人数"],
-        },
-        numeric_keys=["visitors"],
-    )
-    # 针对「游客人数统计」这类多 Sheet 模板：优先选择真正只有「日期 / 人数」两列的 Sheet
-    try:
-        import pandas as _pd_vis
-        _xls = _pd_vis.ExcelFile(_visitors_file)
-        _best = None
-        for _sheet in _xls.sheet_names:
-            _df_s = _pd_vis.read_excel(_visitors_file, sheet_name=_sheet)
-            cols = [str(c) for c in _df_s.columns]
-            if len(cols) == 2 and any("日期" in c for c in cols) and any("人数" in c for c in cols):
-                _best = _df_s
-                break
-        if _best is not None:
-            # 标准化为内部字段：date / visitors
-            col_date = [c for c in _best.columns if "日期" in str(c)][0]
-            col_vis = [c for c in _best.columns if "人数" in str(c)][0]
-            df_visitors = pd.DataFrame(
-                {
-                    "date": _best[col_date],
-                    "visitors": _best[col_vis],
-                }
-            )
-    except Exception:
-        # 任何异常都不影响主流程，保持 df_visitors 现状
-        pass
 
     # 统一时间列
     for df in [df_orders, df_pay, df_refunds]:
@@ -368,7 +556,10 @@ def run_catering_analysis():
         _d1 = _pay_clean["time"].max().normalize()
         _data_range_str = _d0.strftime("%Y-%m-%d") + "_" + _d1.strftime("%Y-%m-%d")
     else:
+        _d0 = _d1 = None
         _data_range_str = datetime.now().strftime("%Y-%m-%d")
+
+    df_visitors = _load_visitor_dataframe(_visitors_file, period_start=_d0, period_end=_d1)
     _restaurant_name = os.path.basename(os.getcwd())
     _script_dir = os.path.dirname(os.path.abspath(__file__))
     _output_dir = os.path.join(_script_dir, "output", _restaurant_name, _data_range_str)
@@ -505,7 +696,13 @@ def run_catering_analysis():
         .reset_index()
     )
     user_rfm.columns = ["payer", "last_visit", "frequency", "monetary"]
-    analysis_end = df_persona["time"].max().normalize()
+    if not df_persona["time"].notna().any():
+        if not _pay_clean.empty:
+            analysis_end = _pay_clean["time"].max().normalize()
+        else:
+            analysis_end = pd.Timestamp.now().normalize()
+    else:
+        analysis_end = df_persona["time"].max().normalize()
     user_rfm["R_days"] = (analysis_end - user_rfm["last_visit"].dt.normalize()).dt.days
 
     def segment_user(row):
@@ -733,45 +930,62 @@ def run_catering_analysis():
         risk_dishes = pd.DataFrame(columns=dish_final.columns)
 
     # 关键备注词分析：基于整单备注 + 菜品 + 时段 + 星期
-    df_order_rem = df_orders[["id", "order_remark"]].copy()
-    df_order_rem["备注词"] = df_order_rem["order_remark"].astype(str).str.strip().replace({"": "--"})
-    # 统计备注频次（-- 视为无备注，后面剔除）
+    df_order_rem = df_orders[["id", "order_remark", "time"]].copy()
+    df_order_rem["备注词"] = (
+        df_order_rem["order_remark"]
+        .astype(str)
+        .str.strip()
+        .replace({"": "--", "nan": "--", "None": "--"})
+    )
     remark_freq_all = df_order_rem["备注词"].value_counts().reset_index()
     remark_freq_all.columns = ["备注词", "频次"]
     remark_freq_all = remark_freq_all[remark_freq_all["备注词"] != "--"]
-    # 关联菜品与时间
-    df_rem_detail = pd.merge(
-        df_sales[["id", "dish"]],
-        df_pay[["id", "time"]],
-        on="id",
-        how="left",
-    )
-    df_rem_detail = pd.merge(df_rem_detail, df_order_rem[["id", "备注词"]], on="id", how="left")
-    # 去掉无备注（--）
-    df_rem_detail = df_rem_detail[df_rem_detail["备注词"] != "--"]
-    if not df_rem_detail.empty:
-        df_rem_detail["time"] = pd.to_datetime(df_rem_detail["time"], errors="coerce")
-        df_rem_detail["weekday"] = df_rem_detail["time"].dt.weekday
-        df_rem_detail["星期"] = df_rem_detail["weekday"].map(
+
+    df_with_rem = df_order_rem[df_order_rem["备注词"] != "--"].copy()
+    if not df_with_rem.empty:
+        df_with_rem["time"] = pd.to_datetime(df_with_rem["time"], errors="coerce")
+        df_with_rem["星期"] = df_with_rem["time"].dt.weekday.map(
             lambda x: WEEKDAY_CN[int(x)] if pd.notna(x) and 0 <= int(x) < 7 else ""
         )
-        df_rem_detail["时段"] = df_rem_detail["time"].apply(classify_daypart)
+        df_with_rem["时段"] = df_with_rem["time"].apply(classify_daypart)
 
         def top_mode(s):
             s = s.dropna()
             if s.empty:
                 return ""
+            s = s.astype(str).str.strip()
+            s = s[(s != "") & (s != "nan")]
+            if s.empty:
+                return ""
             return s.value_counts().idxmax()
 
+        if not df_sales.empty and "dish" in df_sales.columns:
+            dish_by_id = (
+                df_sales.dropna(subset=["dish"])
+                .groupby("id")["dish"]
+                .agg(top_mode)
+                .reset_index()
+            )
+            df_with_rem = df_with_rem.merge(dish_by_id, on="id", how="left")
+        else:
+            df_with_rem["dish"] = ""
+
         remark_top = (
-            df_rem_detail.groupby("备注词")
+            df_with_rem.groupby("备注词")
             .agg({"dish": top_mode, "时段": top_mode, "星期": top_mode})
             .reset_index()
             .rename(columns={"dish": "关联菜品", "时段": "高发时段", "星期": "高发星期"})
         )
         remark_analysis = remark_freq_all.merge(remark_top, on="备注词", how="left")
+    elif not remark_freq_all.empty:
+        remark_analysis = remark_freq_all.copy()
+        remark_analysis["关联菜品"] = ""
+        remark_analysis["高发时段"] = ""
+        remark_analysis["高发星期"] = ""
     else:
-        remark_analysis = pd.DataFrame(columns=["备注词", "频次", "关联菜品", "高发时段", "高发星期"])
+        remark_analysis = pd.DataFrame(
+            columns=["备注词", "频次", "关联菜品", "高发时段", "高发星期"]
+        )
 
     # 菜品-时段销量占比：菜品在各时段销量的占比
     df_dish_time = pd.merge(
@@ -1269,7 +1483,7 @@ def run_catering_analysis():
             g["op_type"] = ""
 
         g["weekday_cn"] = g["date"].dt.dayofweek.map(
-            lambda i: WEEKDAY_CN[i] if pd.notna(i) else ""
+            lambda i: WEEKDAY_CN[int(i)] if pd.notna(i) and 0 <= int(i) < 7 else ""
         )
 
         def _time_bucket(t):
@@ -1691,7 +1905,13 @@ def run_catering_analysis():
         so["soldout_time"] = pd.to_datetime(so["soldout_time"], errors="coerce")
         so["resume_time"] = pd.to_datetime(so.get("resume_time"), errors="coerce")
         so["sold_date"] = so["soldout_time"].dt.normalize()
-        so["weekday_cn"] = so["sold_date"].dt.dayofweek.map(lambda i: WEEKDAY_CN[i])
+        if "date" in so.columns:
+            so["sold_date"] = so["sold_date"].fillna(
+                pd.to_datetime(so["date"], errors="coerce").dt.normalize()
+            )
+        so["weekday_cn"] = so["sold_date"].dt.dayofweek.map(
+            lambda i: WEEKDAY_CN[int(i)] if pd.notna(i) and 0 <= int(i) < 7 else ""
+        )
         so["daypart"] = so["soldout_time"].apply(classify_daypart)
 
         # 统一计算单次停售时长（分钟）：优先用文本「沽清时长」，否则用解沽-沽清
@@ -2000,7 +2220,7 @@ def run_catering_analysis():
     # 用餐人数：只从订单表推算，按「日期 + 桌号」聚合后取每日桌最大人数再求和，以尽量避免重复计数
     if not df_visitors.empty and "visitors" in df_visitors.columns and "date" in df_visitors.columns:
         df_visitors = df_visitors.copy()
-        df_visitors["date"] = pd.to_datetime(df_visitors["date"], errors="coerce").dt.normalize()
+        df_visitors["date"] = _parse_visitor_dates(df_visitors["date"])
         df_visitors["visitors"] = pd.to_numeric(df_visitors["visitors"], errors="coerce")
         df_visitors = df_visitors.dropna(subset=["date"])
 
