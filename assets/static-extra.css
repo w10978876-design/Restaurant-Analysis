@@ -105,3 +105,14 @@
   padding: 0 20px 40px;
   margin: 0 auto;
 }
+.clickable-row { cursor: pointer; }
+.clickable-row.is-selected td { background: #eff6ff; }
+.customer-select-static {
+  width: 100%;
+  font-size: 13px;
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+  color: #0f172a;
+}
