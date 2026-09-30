@@ -1,0 +1,107 @@
+
+.static-table-wrap { overflow-x: auto; }
+.static-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  background: #fff;
+}
+.static-table th, .static-table td {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 8px 10px;
+  text-align: left;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.static-table th {
+  background: #f8fafc;
+  color: #64748b;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+}
+.static-table tr:hover td { background: #f8fafc; }
+.segment-tabs-static {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 12px;
+}
+.segment-tabs-static .tab {
+  flex: 1 1 auto;
+  text-align: center;
+  padding: 10px 14px;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-bottom: none;
+  border-right: none;
+  color: #334155;
+  font-size: 13px;
+}
+.segment-tabs-static .tab:last-child { border-right: 1px solid #e2e8f0; }
+.segment-tabs-static .tab.active {
+  color: #0f172a;
+  border-top: 2px solid #2563eb;
+  font-weight: 600;
+}
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+.static-toolbar-btn {
+  font-size: 12px;
+  font-weight: 500;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.55);
+  background: transparent;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+.static-report-btn {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e3a5f;
+  background: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 12px;
+  box-shadow: 0 1px 2px rgba(15,23,42,.12);
+}
+.period-selector-static {
+  min-width: 200px;
+  background: #fff;
+  color: #0f172a;
+  border-radius: 6px;
+  border: none;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+.detail-row-static {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 8px;
+}
+@media (max-width: 960px) {
+  .detail-row-static { grid-template-columns: 1fr; }
+  .page-header { flex-direction: column; align-items: flex-start; }
+}
+.kpi-grid-static {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 0;
+  overflow: visible;
+}
+@media (max-width: 1200px) {
+  .kpi-grid-static { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .kpi-grid-static { grid-template-columns: 1fr; }
+}
+.container-static {
+  max-width: 1400px;
+  padding: 0 20px 40px;
+  margin: 0 auto;
+}

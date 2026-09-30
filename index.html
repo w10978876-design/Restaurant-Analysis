@@ -3,252 +3,667 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>诺好供应链 · 2026年9月客户复盘</title>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <style>
-    :root {
-      --bg: #f3f5f8;
-      --card: #ffffff;
-      --text: #0f172a;
-      --muted: #64748b;
-      --line: #e2e8f0;
-      --blue: #1d4ed8;
-      --blue-soft: #eff6ff;
-      --ink: #1e3a5f;
-      --good: #047857;
-      --bad: #b91c1c;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", system-ui, sans-serif;
-      background:
-        radial-gradient(1200px 500px at 10% -10%, #dbeafe 0%, transparent 55%),
-        radial-gradient(900px 400px at 100% 0%, #e2e8f0 0%, transparent 50%),
-        var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
-    .wrap { max-width: 1100px; margin: 0 auto; padding: 28px 18px 64px; }
-    header.hero {
-      background: linear-gradient(135deg, #16365c 0%, #1d4ed8 100%);
-      color: #fff;
-      border-radius: 18px;
-      padding: 28px 28px 24px;
-      box-shadow: 0 18px 40px rgba(29, 78, 216, 0.18);
-      margin-bottom: 22px;
-    }
-    header.hero .brand { font-size: 13px; letter-spacing: .08em; opacity: .85; text-transform: uppercase; }
-    header.hero h1 { margin: 8px 0 10px; font-size: clamp(24px, 4vw, 34px); font-weight: 700; }
-    header.hero p { margin: 0; opacity: .9; font-size: 14px; }
-    .meta { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
-    .chip {
-      background: rgba(255,255,255,.14);
-      border: 1px solid rgba(255,255,255,.22);
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 12px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-    @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 16px 16px 14px;
-      box-shadow: 0 1px 2px rgba(15,23,42,.04);
-    }
-    .card .label { color: var(--muted); font-size: 12px; }
-    .card .value { font-size: 24px; font-weight: 700; margin-top: 6px; letter-spacing: -.02em; }
-    .card .sub { margin-top: 6px; font-size: 12px; color: var(--muted); }
-    .up { color: var(--good); }
-    .down { color: var(--bad); }
-    section { margin-top: 18px; }
-    section h2 {
-      margin: 0 0 10px;
-      font-size: 16px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    section h2::before {
-      content: "";
-      width: 4px; height: 14px; border-radius: 2px; background: var(--blue);
-    }
-    .panel { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th, td { padding: 10px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
-    th { color: var(--muted); font-weight: 600; font-size: 12px; }
-    tr:last-child td { border-bottom: none; }
-    .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .tag {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: #f1f5f9;
-      color: #334155;
-      font-size: 11px;
-    }
-    .md { font-size: 14px; color: #1e293b; }
-    .md h1,.md h2,.md h3 { margin: 1.1em 0 .45em; line-height: 1.35; }
-    .md h1 { font-size: 20px; } .md h2 { font-size: 17px; } .md h3 { font-size: 15px; }
-    .md p, .md li { margin: .35em 0; }
-    .md ul { padding-left: 1.2em; }
-    .md strong { color: #0f172a; }
-    .md hr { border: none; border-top: 1px solid var(--line); margin: 1.2em 0; }
-    .two {
-      display: grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 12px;
-    }
-    @media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
-    footer {
-      margin-top: 28px;
-      color: var(--muted);
-      font-size: 12px;
-      text-align: center;
-    }
-    .note {
-      margin-top: 8px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-  </style>
+  <title>诺好供应链 · 2026年9月复盘</title>
+  <link rel="stylesheet" href="./assets/styles.css" />
+  <link rel="stylesheet" href="./assets/static-extra.css" />
 </head>
 <body>
-  <div class="wrap">
-    <header class="hero">
-      <div class="brand">NUOHAO SUPPLY CHAIN</div>
-      <h1 id="title">诺好供应链 · 客户复盘</h1>
-      <p id="subtitle"></p>
-      <div class="meta" id="meta"></div>
-    </header>
-
-    <div class="grid" id="kpi"></div>
-
-    <section>
-      <h2>月度 AI 复盘</h2>
-      <div class="panel md" id="monthly"></div>
-    </section>
-
-    <section>
-      <h2>已合作客户 TOP（按本月销售额）</h2>
-      <div class="panel" style="overflow-x:auto">
-        <table>
-          <thead>
-            <tr>
-              <th>客户</th>
-              <th class="num">销售额</th>
-              <th class="num">同比</th>
-              <th class="num">环比</th>
-              <th class="num">发货额</th>
-              <th class="num">总运费</th>
-              <th>状态</th>
-            </tr>
-          </thead>
-          <tbody id="coop-body"></tbody>
-        </table>
+  <div class="page-header">
+    <div class="page-header-copy">
+      <h1>诺好供应链 · 2026年9月复盘</h1>
+      <p>以 ERP 为业务主轴、天财为财务口径｜2026年9月复盘｜天财 2026-09-01～2026-09-30｜业务 2026-08-28～2026-09-30｜已定稿·只读</p>
+    </div>
+    <div class="page-header-actions">
+      <div class="period-selector-wrap">
+        <span class="period-toolbar-label">复盘期</span>
+        <select class="period-selector-static" disabled>
+          <option selected>2026年9月复盘（2026-09）</option>
+        </select>
       </div>
-    </section>
-
-    <section class="two">
-      <div>
-        <h2>意向但未合作</h2>
-        <div class="panel" style="overflow-x:auto">
-          <table>
-            <thead><tr><th>客户</th><th class="num">文本提及</th><th>负责人</th></tr></thead>
-            <tbody id="intent-body"></tbody>
-          </table>
-        </div>
-        <p class="note" id="silent-note"></p>
-      </div>
-      <div>
-        <h2>操作员动态</h2>
-        <div class="panel">
-          <table>
-            <thead><tr><th>操作员</th><th class="num">汇报条数</th><th class="num">提及客户</th></tr></thead>
-            <tbody id="op-body"></tbody>
-          </table>
-        </div>
-        <div class="panel" style="margin-top:12px" id="inv-panel"></div>
-      </div>
-    </section>
-
-    <footer>
-      由诺好客户分析复盘导出 · 静态页托管于 GitHub Pages · 数据期 <span id="foot-period"></span>
-    </footer>
+      <button class="static-toolbar-btn" type="button" disabled>本期设置</button>
+      <button class="static-toolbar-btn" type="button" disabled>新建复盘期</button>
+      <button class="static-report-btn" type="button" onclick="document.getElementById('report-modal').showModal()">生成月度复盘报告</button>
+    </div>
   </div>
-  <script id="data" type="application/json">{"period": "2026-09", "label": "2026年9月复盘", "acc": "2026-09-01～2026-09-30", "biz": "2026-08-28～2026-09-30", "generated_at": "2026-09-30", "kpi": {"sales": 8750263.629999999, "mom": 1.319341578007602, "yoy": 1.2972934951516317, "return_rate": 0.025496591167828958, "erp_active_projects": 21, "erp_ship_boxes": 153809.0, "erp_ship_docs": 41, "erp_ship_tickets": 43, "ship_supply_amount": 6353122.83, "freight_per_box": 1.550292050530203, "freight_per_box_mom": -0.1215029914902398, "inventory_boxes": 145979.0, "inventory_by_factory": [{"name": "锦鸿库", "customers": 13, "boxes": 97475}, {"name": "华跃库", "customers": 5, "boxes": 43951}, {"name": "多乐多库", "customers": 3, "boxes": 4553}], "new_products": 5, "new_product_items": ["乐豆家便利 · 乐豆家420ml椰子水", "凯辉便利 · 凯辉420茉莉椰子水", "每一天（琼浆） · 每一天420ml茉莉椰子水", "每一天（琼浆） · 每一天420ml青瓜椰子水", "集刻 · 集刻420ml青瓜椰子水"]}, "counts": {"cooperated": 22, "intent_active": 3, "intent_silent": 40}, "cooperated_top": [{"name": "新天地", "sales": 3446955.0, "yoy": null, "mom": 6.019314975558841, "boxes": 15400.0, "ship_amt": 602910.0, "freight": 30055.550000000003, "status": "去库存周期 · 交付顺延"}, {"name": "每一天（琼浆）", "sales": 1135991.29, "yoy": 1.695807965115218, "mom": 1.5570055443778243, "boxes": 40229.0, "ship_amt": 1752527.4, "freight": 62094.44, "status": "交付顺延"}, {"name": "香港711（百望达）", "sales": 1124514.6, "yoy": null, "mom": 2.729733333333334, "boxes": 27973.0, "ship_amt": 1124514.6, "freight": 21835.550000000003, "status": "稳步运行"}, {"name": "today今天", "sales": 984079.2, "yoy": 3.753372014166227, "mom": 2.9552227648158196, "boxes": 16431.0, "ship_amt": 727347.6, "freight": 31820.0, "status": "交付顺延"}, {"name": "邻几", "sales": 840612.43, "yoy": -0.49443007426583685, "mom": 0.14430129772684094, "boxes": 18250.0, "ship_amt": 681165.0, "freight": 22577.78, "status": "同比走弱 · 交付顺延"}, {"name": "凯辉便利", "sales": 301537.2, "yoy": 0.4888189419580368, "mom": 0.5797775696116584, "boxes": 2132.0, "ship_amt": 95940.0, "freight": 10363.33, "status": "交付顺延"}, {"name": "壹度", "sales": 211401.75, "yoy": 0.9397503303237172, "mom": -0.4384979013567972, "boxes": 5193.0, "ship_amt": 0.0, "freight": 0.0, "status": "销售走弱 · 交付顺延"}, {"name": "乐豆家便利", "sales": 205589.7, "yoy": -0.6613848456032713, "mom": -0.014584260502141445, "boxes": 9627.0, "ship_amt": 401017.65, "freight": 19357.78, "status": "同比走弱 · 交付顺延"}, {"name": "隆马特", "sales": 125152.5, "yoy": null, "mom": null, "boxes": 3034.0, "ship_amt": 0.0, "freight": 0.0, "status": "交付顺延"}, {"name": "京小盒（琼浆）", "sales": 106272.0, "yoy": -0.16713082163776447, "mom": -0.7015864089053004, "boxes": 5300.0, "ship_amt": 211845.0, "freight": 10333.34, "status": "销售走弱 · 交付顺延"}, {"name": "邢台天天", "sales": 0.0, "yoy": -1.0, "mom": null, "boxes": 0.0, "ship_amt": 0.0, "freight": 0.0, "status": "同比走弱"}, {"name": "折扣牛", "sales": 0.0, "yoy": null, "mom": null, "boxes": 0.0, "ship_amt": 0.0, "freight": 0.0, "status": "待观测"}, {"name": "集刻", "sales": 0.0, "yoy": -1.0, "mom": null, "boxes": 2484.0, "ship_amt": 113643.0, "freight": 9333.33, "status": "同比走弱"}, {"name": "汇宁", "sales": 0.0, "yoy": null, "mom": null, "boxes": 0.0, "ship_amt": 0.0, "freight": 0.0, "status": "待观测"}, {"name": "云南健之佳", "sales": 0.0, "yoy": null, "mom": -1.0, "boxes": 0.0, "ship_amt": 0.0, "freight": 0.0, "status": "销售走弱"}], "intent_active": [{"name": "华东美宜佳（椰子水）", "mentions": 11, "manager": "刘云"}, {"name": "悦来悦喜", "mentions": 8, "manager": "关乐乐"}, {"name": "新佳宜", "mentions": 2, "manager": "伍敏谊"}], "operators": [{"name": "单超", "reports": 21, "customers": 21}, {"name": "王焱", "reports": 18, "customers": 15}, {"name": "高山", "reports": 18, "customers": 16}, {"name": "李荣华", "reports": 10, "customers": 13}, {"name": "王岩", "reports": 10, "customers": 15}], "monthly_ai": "**2026年9月 AI 商业复盘报告**  \n（业务窗：2026-08-28 至 2026-09-30｜数据驱动 · 因果归因 · 主要矛盾优先）\n\n---\n\n### 一、客户端：交付顺延成系统性瓶颈，新天地与Today爆发式增长掩盖结构性风险  \n\n**客户状态进展与需求**  \n- **核心增量由“去库存+新品启动”双轮驱动**：新天地环比激增601.9%（¥344.7万），主因哈尔滨/长春仓加速消化前期积压椰子水；Today同比+375.3%（¥98.4万），源于茉莉风味椰子水完成标签设计、启动合作并进入首单履约，属典型“新品破冰带动订单回流”。  \n- **交付顺延覆盖全部TOP10已合作客户（除香港711外）**：新天地、Today、每一天、邻几、凯辉等共10家客户出现交期延迟，**根本原因高度集中于标签反复修改与包材确认滞后**——邻几、凯辉、24客、乐豆家均因标签设计多轮返工（金标替换、转曲图缺失、打样问题），导致工厂无法锁定最终版面，进而阻滞排产启动；叠加24客新增5000件1L订单需协调新工厂拼产，进一步加剧产能调度刚性。  \n\n**客户线索概述**  \n意向池持续扩容但转化节奏偏缓：悦来悦喜、京津冀美宜佳（冰杯）保持高频跟进，但40家未沟通意向客户中，含全家、中石化易捷、光明集团等战略级渠道，尚未建立有效触达路径，线索沉淀仍以被动响应为主。\n\n---\n\n### 二、供给端：标签—包材—排产链路断裂，成为交付最大堵点  \n\n**工厂排产与库存状态**  \n- **标签反复修改引发排产连锁延迟**：邻几、凯辉、24客、新天地四家客户同步推进1L/368ml标签改版，其中邻几两次修改、凯辉二次打样未闭环、24客协议条款变更与标签设计并行，直接导致华跃、锦鸿等主力工厂无法释放稳定排产窗口；**包材到位≠可投产**，因标签未终审，工厂拒绝启动印制，形成“包材静置→排产冻结→订单顺延”死循环。  \n- **大货消化与库存结构失衡并存**：新天地8.5万件历史库存加速出清支撑了当月高增长，但壹度、京小盒、家园便利等客户出库归零，反映部分SKU动销彻底停滞；乐豆家420ml虽完成检测报告并启动生产，但因三方合同法务审核未闭环，发货仍受制约。\n\n**发货情况**  \n- **运力组织能力不足暴露区域性短板**：邻几芜湖仓“找车难”非孤立事件，结合“有发货无单号约2笔”，指向物流协同机制薄弱——未建立区域仓运力预占机制，临时询价、比价、调度耗时过长，造成至少3家客户（邻几、乐豆家、集刻）存在发货延迟风险，影响区域到货时效及客户结算节奏。\n\n---\n\n### 三、履约端：染菌与霉变类质量事故频发，暴露品控前移失效  \n\n- **安哒1L装召回为本期最严重质量事件**：因疑似染菌导致2074瓶整批召回，工厂承担全部残损成本并承诺补货，直接损失超¥18万元，且引发客户对供应链稳定性信任动摇，回款至今未落地。  \n- **邻几、新天地、壹度、京小盒集中爆发微生物类客诉**：邻几368ml客诉1起、新天地沈阳门店上架异常（事由未写明）、壹度絮状物函告、京小盒霉变——四案均指向同一风险源：**椰子水灌装环节密封性或灭菌参数波动未被实时监控**，工厂未建立批次留样与快速溯源机制，导致问题定位滞后、赔付被动。  \n- **闭环进展分化明显**：安哒、邻几已闭环报损；新天地、壹度仍处样品寄回与染菌排查阶段；京小盒霉变尚未见工厂根因反馈，质量响应链条存在断层。\n\n---\n\n### 四、ERP操作员备注专项分析：手工干预频次低但信号敏感，返工/隔离类备注凸显过程失控  \n\n15笔库存调整仅净变动-15箱，规模微小，但**5条含“返工/隔离/报废”标签的备注集中出现在新天地、Today、邻几等高流量客户SKU上**，尤其锦鸿库新天地368ml单次调减16箱，指向终端验收或仓内质检触发异常处置；自然语言建项21条中20条为“生产/计划”，说明一线仍依赖人工补录驱动作业，系统计划刚性不足，而质量类手工备注正成为过程失控的隐性预警指标。\n\n---  \n**结语：9月是“高增长下的高风险月”**。营收环比+131.9%表象之下，是标签协同失灵、品控前移缺位、运力响应迟滞三大系统性卡点的集中显性化。下月攻坚必须聚焦：① 建立标签终审红黄灯机制（法务+设计+工厂三方会签）；② 对椰子水灌装线启动灭菌参数日监控与批次留样强制执行；③ 在华东/华北试点区域仓运力预占协议。增长不可持续，除非把交付确定性真正焊进流程里。"}</script>
+
+  <div class="container-static">
+    <div class="kpi-grid-static" style="display:grid;grid-template-columns:repeat(5, 1fr);gap:16px;width:100%;box-sizing:border-box;padding:10px 0;overflow:visible"><div style="height:310px;padding:20px;background-color:#fff;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.05);border:1px solid #eef0f2;display:flex;flex-direction:column;justify-content:flex-start;box-sizing:border-box;overflow:visible"><div style="font-size:14px;font-weight:600;color:#555;margin-bottom:12px">💰 1、财务经营结果</div><div style="font-size:28px;font-weight:bold;color:#111;margin-bottom:2px">¥8,750,264</div><div style="font-size:11px;color:#999;margin-bottom:15px">9月天财总出库额</div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">环比增速</span><span style="color:#111;font-weight:500">131.9%</span></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">同比增速</span><span style="color:#111;font-weight:500">129.7%</span></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">综合退货率</span><div style="display:flex;flex-direction:column;align-items:flex-end;text-align:right;line-height:1.35;flex-shrink:0"><div style="color:#111;font-weight:500">2.5%</div><div style="font-size:11px;color:#999;font-weight:400;margin-top:2px">9月入账退货 ¥228,939</div></div></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">月度总发货箱数</span><span style="color:#111;font-weight:500">209,827 箱</span></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">总发货单数</span><span style="color:#111;font-weight:500">77 单</span></div></div><div style="height:310px;padding:20px;background-color:#fff;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.05);border:1px solid #eef0f2;display:flex;flex-direction:column;justify-content:flex-start;box-sizing:border-box;overflow:visible"><div style="font-size:14px;font-weight:600;color:#555;margin-bottom:12px">📂 2、9月 ERP 项目动作全貌</div><div style="font-size:28px;font-weight:bold;color:#111;margin-bottom:2px">21 个</div><div style="font-size:11px;color:#999;margin-bottom:10px">9月活跃项目</div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">新合作客户</span><span style="color:#111;font-weight:500">0 个</span></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">合作新品</span><span class="kpi-tip-anchor" style="text-align:right;flex-shrink:0"><span class="kpi-tip-trigger">5 个</span><div class="kpi-tip-drop"><div class="kpi-tip-head">合作新品 · 共 5 个</div><div class="kpi-tip-scroll"><div class="kpi-tip-line">1. 乐豆家便利 · 乐豆家420ml椰子水</div><div class="kpi-tip-line">2. 凯辉便利 · 凯辉420茉莉椰子水</div><div class="kpi-tip-line">3. 每一天（琼浆） · 每一天420ml茉莉椰子水</div><div class="kpi-tip-line">4. 每一天（琼浆） · 每一天420ml青瓜椰子水</div><div class="kpi-tip-line">5. 集刻 · 集刻420ml青瓜椰子水</div></div></div></span></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">累计生产</span><span style="color:#111;font-weight:500">125,740 箱</span></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">生产项目 / 生产延期</span><span style="color:#111;font-weight:500">20 项 / 9 项</span></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">涉及发货 / 累计发货</span><span style="color:#111;font-weight:500">43 票 / 153,809 箱</span></div></div><div style="height:310px;padding:20px;background-color:#fff;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.05);border:1px solid #eef0f2;display:flex;flex-direction:column;justify-content:flex-start;box-sizing:border-box;overflow:visible"><div style="font-size:14px;font-weight:600;color:#555;margin-bottom:12px">🏭 3、生产履约看板</div><div style="font-size:28px;font-weight:bold;color:#111;margin-bottom:2px">145,979 箱</div><div style="font-size:11px;color:#999;margin-bottom:8px">工厂暂存库存</div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:4px 0;border-bottom:1px dashed #f8fafc;font-size:11px;box-sizing:border-box"><span style="color:#777">锦鸿库</span><span class="kpi-tip-anchor" style="text-align:right;flex-shrink:0"><span class="kpi-tip-trigger">13 客 / 97,475 箱</span><div class="kpi-tip-drop"><div class="kpi-tip-head">锦鸿库 · 暂存客户 · 共 13 客</div><div class="kpi-tip-scroll"><div class="kpi-tip-line">1. 折扣牛 · 20,008 箱</div><div class="kpi-tip-line">2. 新天地 · 19,249 箱</div><div class="kpi-tip-line">3. 邻几 · 15,252 箱</div><div class="kpi-tip-line">4. today今天 · 13,872 箱</div><div class="kpi-tip-line">5. 云南健之佳 · 7,200 箱</div><div class="kpi-tip-line">6. 凯辉便利 · 6,567 箱</div><div class="kpi-tip-line">7. 安哒（福酱） · 4,081 箱</div><div class="kpi-tip-line">8. 每一天（琼浆） · 3,139 箱</div><div class="kpi-tip-line">9. 隆马特 · 3,023 箱</div><div class="kpi-tip-line">10. 壹度 · 2,992 箱</div><div class="kpi-tip-line">11. 供销社 · 1,367 箱</div><div class="kpi-tip-line">12. 京小盒（琼浆） · 724 箱</div><div class="kpi-tip-line">13. 怡乐可可368ml椰子水 · 1 箱</div></div></div></span></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:4px 0;border-bottom:1px dashed #f8fafc;font-size:11px;box-sizing:border-box"><span style="color:#777">华跃库</span><span class="kpi-tip-anchor" style="text-align:right;flex-shrink:0"><span class="kpi-tip-trigger">5 客 / 43,951 箱</span><div class="kpi-tip-drop"><div class="kpi-tip-head">华跃库 · 暂存客户 · 共 5 客</div><div class="kpi-tip-scroll"><div class="kpi-tip-line">1. 新天地 · 38,563 箱</div><div class="kpi-tip-line">2. today今天 · 3,174 箱</div><div class="kpi-tip-line">3. 壹度 · 1,880 箱</div><div class="kpi-tip-line">4. 凯辉便利 · 331 箱</div><div class="kpi-tip-line">5. 每一天（琼浆） · 3 箱</div></div></div></span></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:4px 0;border-bottom:1px dashed #f8fafc;font-size:11px;box-sizing:border-box"><span style="color:#777">多乐多库</span><span class="kpi-tip-anchor" style="text-align:right;flex-shrink:0"><span class="kpi-tip-trigger">3 客 / 4,553 箱</span><div class="kpi-tip-drop"><div class="kpi-tip-head">多乐多库 · 暂存客户 · 共 3 客</div><div class="kpi-tip-scroll"><div class="kpi-tip-line">1. 24客 · 3,049 箱</div><div class="kpi-tip-line">2. 百望达 · 1,500 箱</div><div class="kpi-tip-line">3. 香港711（百望达） · 4 箱</div></div></div></span></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">按时履约率</span><span style="color:#111;font-weight:500">0.0%（0/20）</span></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">平均顺延 / 最长延期</span><span style="display:inline-flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:2px"><span class="kpi-tip-anchor" style="text-align:right;flex-shrink:0"><span class="kpi-tip-trigger">9.3 天</span><div class="kpi-tip-drop"><div class="kpi-tip-head">较最初计划 · 20 项顺延 · 共 20 项</div><div class="kpi-tip-scroll"><div class="kpi-tip-line">1. 百望达 260910 · 18 天</div><div class="kpi-tip-line">2. 凯辉便利 260917 · 11 天</div><div class="kpi-tip-line">3. 壹度 260917 · 11 天</div><div class="kpi-tip-line">4. 安哒（福酱） 260917 · 11 天</div><div class="kpi-tip-line">5. 家园便利 260917 · 11 天</div><div class="kpi-tip-line">6. 新天地 260917 · 11 天</div><div class="kpi-tip-line">7. 邻几 260917 · 11 天</div><div class="kpi-tip-line">8. 隆马特 260917 · 11 天</div><div class="kpi-tip-line">9. today今天 260918 · 10 天</div><div class="kpi-tip-line">10. 乐豆家便利 260918 · 10 天</div><div class="kpi-tip-line">11. today今天 260831 · 8 天</div><div class="kpi-tip-line">12. 乐豆家便利 260831 · 8 天</div><div class="kpi-tip-line">13. today今天 260921 · 7 天</div><div class="kpi-tip-line">14. 乐豆家便利 260921 · 7 天</div><div class="kpi-tip-line">15. 京小盒（琼浆） 260921 · 7 天</div><div class="kpi-tip-line">16. 凯辉便利 260921 · 7 天</div><div class="kpi-tip-line">17. 安哒（福酱） 260921 · 7 天</div><div class="kpi-tip-line">18. 家园便利 260921 · 7 天</div><div class="kpi-tip-line">19. 每一天（琼浆） 260921 · 7 天</div><div class="kpi-tip-line">20. 邻几 260921 · 7 天</div></div><div class="kpi-tip-note">有效完工日 − initialWindowEnd（最初计划）；履约率 = 按时批次/总排产批次（相对当前承诺 windowEnd）。</div></div></span><span style="color:#94a3b8;font-weight:400"> / </span><span class="kpi-tip-anchor" style="text-align:right;flex-shrink:0"><span class="kpi-tip-trigger-warn">18 天</span><div class="kpi-tip-drop"><div class="kpi-tip-head">最长 · 百望达 260910 · 共 20 项</div><div class="kpi-tip-scroll"><div class="kpi-tip-line">1. 百望达 260910 · 18 天</div><div class="kpi-tip-line">2. 凯辉便利 260917 · 11 天</div><div class="kpi-tip-line">3. 壹度 260917 · 11 天</div><div class="kpi-tip-line">4. 安哒（福酱） 260917 · 11 天</div><div class="kpi-tip-line">5. 家园便利 260917 · 11 天</div><div class="kpi-tip-line">6. 新天地 260917 · 11 天</div><div class="kpi-tip-line">7. 邻几 260917 · 11 天</div><div class="kpi-tip-line">8. 隆马特 260917 · 11 天</div><div class="kpi-tip-line">9. today今天 260918 · 10 天</div><div class="kpi-tip-line">10. 乐豆家便利 260918 · 10 天</div><div class="kpi-tip-line">11. today今天 260831 · 8 天</div><div class="kpi-tip-line">12. 乐豆家便利 260831 · 8 天</div><div class="kpi-tip-line">13. today今天 260921 · 7 天</div><div class="kpi-tip-line">14. 乐豆家便利 260921 · 7 天</div><div class="kpi-tip-line">15. 京小盒（琼浆） 260921 · 7 天</div><div class="kpi-tip-line">16. 凯辉便利 260921 · 7 天</div><div class="kpi-tip-line">17. 安哒（福酱） 260921 · 7 天</div><div class="kpi-tip-line">18. 家园便利 260921 · 7 天</div><div class="kpi-tip-line">19. 每一天（琼浆） 260921 · 7 天</div><div class="kpi-tip-line">20. 邻几 260921 · 7 天</div></div><div class="kpi-tip-note">≥7 天：20 项</div></div></span></span></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:none;font-size:12px;box-sizing:border-box;margin-bottom:0px"><span style="color:#777">当前未完工</span><span style="color:#111;font-weight:500">0 批</span></div></div><div style="height:310px;padding:20px;background-color:#fff;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.05);border:1px solid #eef0f2;display:flex;flex-direction:column;justify-content:flex-start;box-sizing:border-box;overflow:visible"><div style="font-size:14px;font-weight:600;color:#555;margin-bottom:12px">🚚 4、物流交付效率</div><div style="font-size:28px;font-weight:bold;color:#111;margin-bottom:2px">153,809 箱</div><div style="font-size:11px;color:#999;margin-bottom:15px">ERP 物流发货箱数</div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">ERP 发货单数</span><span style="color:#111;font-weight:500">41 单</span></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">物流成本</span><div style="text-align:right;line-height:1.35"><span style="color:#111;font-weight:500">¥1.55/箱</span><div style="font-size:10px;color:#94a3b8;margin-top:2px">环比 -12.2%</div></div></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">运费总计</span><span style="color:#111;font-weight:500">¥238,449</span></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">有发货无单号</span><span class="kpi-tip-anchor" style="text-align:right;flex-shrink:0"><span class="kpi-tip-trigger-warn">2 笔</span><div class="kpi-tip-drop"><div class="kpi-tip-head">有发货无 ERP 单号 · 共 2 笔</div><div class="kpi-tip-scroll"><div class="kpi-tip-line">1. 凯辉 · 凯辉420茉莉椰子水（2132箱，09/24）</div><div class="kpi-tip-line">2. 24客 · 24客1L椰子水（4989箱，09/25）</div></div></div></span></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:none;font-size:12px;box-sizing:border-box;margin-bottom:0px"><span style="color:#777">累计出货额</span><span style="color:#111;font-weight:500">¥6,353,123</span></div></div><div style="height:310px;padding:20px;background-color:#fff;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.05);border:1px solid #eef0f2;display:flex;flex-direction:column;justify-content:flex-start;box-sizing:border-box;overflow:visible"><div style="font-size:14px;font-weight:600;color:#555;margin-bottom:12px">📊 5、业财对账备忘</div><div style="font-size:28px;font-weight:bold;color:#111;margin-bottom:2px">57 项</div><div style="font-size:11px;color:#999;margin-bottom:10px">单据级未匹配（双向合计）</div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">项目有，财务无</span><div style="text-align:right;line-height:1.35"><span class="kpi-tip-anchor" style="text-align:right;flex-shrink:0"><span class="kpi-tip-trigger">9 项</span><div class="kpi-tip-drop"><div class="kpi-tip-head">项目有 · 财务无（9月已发货） · 共 9 项</div><div class="kpi-tip-scroll"><div class="kpi-tip-line">1. 邻几 · 邻几 260917 · ZXWX00002132 等2单 · 2,800 箱</div><div class="kpi-tip-line">2. 京小盒（琼浆） · 京小盒（琼浆） 260921 · ZXWX00002135 · 2,600 箱</div><div class="kpi-tip-line">3. today今天 · today今天 260918 · ZXWX00002150 · 2,600 箱</div><div class="kpi-tip-line">4. 乐豆家便利 · 乐豆家便利 260918 · ZXWX00002152 · 2,529 箱</div><div class="kpi-tip-line">5. 邻几 · 邻几 260921 · ZXWX00002132 等2单 · 2,500 箱</div><div class="kpi-tip-line">6. 乐豆家便利 · 乐豆家便利 260921 · ZXWX00002152 · 2,096 箱</div><div class="kpi-tip-line">7. 家园便利 · 家园便利 260917 · ZXWX00002138 · 2,006 箱</div><div class="kpi-tip-line">8. 家园便利 · 家园便利 260921 · ZXWX00002138 · 1,988 箱</div><div class="kpi-tip-line">9. today今天 · today今天 260921 · ZXWX00002150 · 1,800 箱</div></div><div class="kpi-tip-note">合计 5 客 · 20,919 箱</div></div></span><div style="font-size:10px;color:#94a3b8;margin-top:2px">5 客 · 20,919 箱</div></div></div><div style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 0;border-bottom:1px dashed #f5f7f9;font-size:12px;box-sizing:border-box"><span style="color:#777">财务有，项目无</span><div style="text-align:right;line-height:1.35"><span class="kpi-tip-anchor" style="text-align:right;flex-shrink:0"><span class="kpi-tip-trigger">48 笔</span><div class="kpi-tip-drop"><div class="kpi-tip-head">财务有 · 项目无（9月天财单据） · 共 48 笔</div><div class="kpi-tip-scroll"><div class="kpi-tip-line">1. 凯辉便利 · ZXWX00002029 · 5,100 箱</div><div class="kpi-tip-line">2. 新天地 · ZXWX00002010 · 5,000 箱</div><div class="kpi-tip-line">3. 新天地 · ZXWX00002028 · 4,675 箱</div><div class="kpi-tip-line">4. 新天地 · ZXWX00002009 · 4,650 箱</div><div class="kpi-tip-line">5. 新天地 · ZXWX00002008 · 4,650 箱</div><div class="kpi-tip-line">6. 新天地 · ZXWX00002037 · 4,650 箱</div><div class="kpi-tip-line">7. 新天地 · ZXWX00001987 · 4,650 箱</div><div class="kpi-tip-line">8. 新天地 · ZXWX00001964 · 4,650 箱</div><div class="kpi-tip-line">9. 新天地 · ZXWX00001965 · 4,650 箱</div><div class="kpi-tip-line">10. 新天地 · ZXWX00001986 · 4,650 箱</div><div class="kpi-tip-line">11. today今天 · ZXWX00001969 · 4,593 箱</div><div class="kpi-tip-line">12. 新天地 · ZXWX00001968 · 4,239 箱</div><div class="kpi-tip-line">13. 新天地 · ZXWX00001967 · 3,828 箱</div><div class="kpi-tip-line">14. 新天地 · ZXWX00002032 · 3,784 箱</div><div class="kpi-tip-line">15. today今天 · ZXWX00001999 · 3,123 箱</div><div class="kpi-tip-line">16. 隆马特 · ZXWX00002027 · 3,034 箱</div><div class="kpi-tip-line">17. 壹度 · ZXWX00002018 · 2,700 箱</div><div class="kpi-tip-line">18. 新天地 · ZXWX00001966 · 2,700 箱</div><div class="kpi-tip-line">19. 新天地 · ZXWX00002007 · 2,700 箱</div><div class="kpi-tip-line">20. 邻几 · ZXWX00002041 · 2,700 箱</div><div class="kpi-tip-line">21. 邻几 · ZXWX00002033 · 2,650 箱</div><div class="kpi-tip-line">22. 邻几 · ZXWX00002034 · 2,600 箱</div><div class="kpi-tip-line">23. today今天 · ZXWX00002035 · 2,600 箱</div><div class="kpi-tip-line">24. 邻几 · ZXWX00002031 · 2,561 箱</div><div class="kpi-tip-line">25. 凯辉便利 · ZXWX00002030 · 2,514 箱</div><div class="kpi-tip-line">26. 新天地 · ZXWX00002011 · 2,500 箱</div><div class="kpi-tip-line">27. 新天地 · ZXWX00001984 · 2,450 箱</div><div class="kpi-tip-line">28. 新天地 · ZXWX00002038 · 2,441 箱</div><div class="kpi-tip-line">29. 安哒（福酱） · ZXWX00002040 · 2,028 箱</div><div class="kpi-tip-line">30. 壹度 · ZXWX00002039 · 1,200 箱</div><div class="kpi-tip-line">31. 壹度 · ZXWX00002019 · 1,165 箱</div><div class="kpi-tip-line">32. 供销社 · ZXWX00001941 · 860 箱</div><div class="kpi-tip-line">33. 供销社 · ZXWX00001942 · 600 箱</div><div class="kpi-tip-line">34. 供销社 · ZXWX00001947 · 400 箱</div><div class="kpi-tip-line">35. 供销社 · ZXWX00001945 · 400 箱</div><div class="kpi-tip-line">36. 壹度 · ZXWX00002023 · 128 箱</div><div class="kpi-tip-line">37. 邻几 · ZXWX00001907 · 115 箱</div><div class="kpi-tip-line">38. 邻几 · ZXWX00002036 · 39 箱</div><div class="kpi-tip-line">39. 新天地 · ZXWX00002045 · 9 箱</div><div class="kpi-tip-line">40. 每一天（琼浆） · ZXWX00002117 · 8 箱</div><div class="kpi-tip-line">41. today今天 · ZXWX00001992 · 7 箱</div><div class="kpi-tip-line">42. today今天 · ZXWX00002116 · 2 箱</div><div class="kpi-tip-line">43. today今天 · ZXWX00002015 · 1 箱</div><div class="kpi-tip-line">44. 每一天（琼浆） · ZXWX00002115 · 1 箱</div><div class="kpi-tip-line">45. 安哒（福酱） · ZXWT00000074 · -8 箱</div><div class="kpi-tip-line">46. 邻几 · ZXWT00000069 · -1,083 箱</div><div class="kpi-tip-line">47. 安哒（福酱） · ZXWT00000072 · -2,066 箱</div><div class="kpi-tip-line">48. 供销社 · ZXWT00000068 · -2,540 箱</div></div><div class="kpi-tip-note">合计 9 客 · 102,307 箱</div></div></span><div style="font-size:10px;color:#94a3b8;margin-top:2px">9 客 · 102,307 箱</div></div></div></div></div>
+
+    <div class="panel">
+      <div class="segment-tabs-static" id="segment-tabs">
+        <div class="tab active" data-tab="tab-cooperated">已合作客户</div>
+        <div class="tab" data-tab="tab-intent-active">意向但未合作</div>
+        <div class="tab" data-tab="tab-intent-silent">意向但未沟通</div>
+        <div class="tab" data-tab="tab-operators">操作员动态</div>
+      </div>
+
+      <div id="tab-cooperated" class="tab-pane active">
+        <div style="font-size:12px;color:#64748b;margin-bottom:8px;line-height:1.5">
+          当前库存：⚠ 周转慢 = 按近3月月均发货，清完需45天以上；
+          ↓ 备货厚 = 暂存量超过近3月月均发货的3倍。
+          状态标签「销售走弱」看环比，「同比走弱」看出库额较去年同期下降超 20%。
+        </div>
+        <div class="customer-table-panel"><div class="table-usage-hint">静态分享版：表格只读；勾选联动在本地系统中可用。</div><div class="static-table-wrap"><table class="static-table"><thead><tr><th>客户名称</th><th>操作员</th><th>9月销售额</th><th>同比</th><th>环比</th><th>发货箱数</th><th>发货单数</th><th>项目数</th><th>ERP发货箱数</th><th>发货次数</th><th>发货额</th><th>总运费</th><th>运费单价</th><th>排产频次</th><th>排产履约率</th><th>当前库存</th><th>库存批次</th><th>状态标签</th></tr></thead><tbody><tr><td>新天地（含多法人主体）</td><td>王岩</td><td>3,446,955</td><td>—</td><td>601.9%</td><td>79,576</td><td>21</td><td>1</td><td>15,400</td><td>4</td><td>602,910</td><td>30,056</td><td>1.95</td><td>1</td><td>0.0%</td><td>57,812 ⚠</td><td>5</td><td>去库存周期 · 交付顺延</td></tr><tr><td>每一天（琼浆）</td><td>高山</td><td>1,135,991</td><td>169.6%</td><td>155.7%</td><td>27,174</td><td>9</td><td>1</td><td>40,229</td><td>11</td><td>1,752,527</td><td>62,094</td><td>1.54</td><td>1</td><td>0.0%</td><td>3,142</td><td>3</td><td>交付顺延</td></tr><tr><td>香港711（百望达）</td><td>王岩</td><td>1,124,515</td><td>—</td><td>273.0%</td><td>27,973</td><td>8</td><td>0</td><td>27,973</td><td>8</td><td>1,124,515</td><td>21,836</td><td>0.78</td><td>0</td><td></td><td>4</td><td>1</td><td>稳步运行</td></tr><tr><td>today今天</td><td>高山</td><td>984,079</td><td>375.3%</td><td>295.5%</td><td>22,355</td><td>10</td><td>3</td><td>16,431</td><td>5</td><td>727,348</td><td>31,820</td><td>1.94</td><td>3</td><td>0.0%</td><td>17,046</td><td>4</td><td>交付顺延</td></tr><tr><td>邻几</td><td>高山</td><td>840,612</td><td>-49.4%</td><td>14.4%</td><td>22,532</td><td>11</td><td>2</td><td>18,250</td><td>6</td><td>681,165</td><td>22,578</td><td>1.24</td><td>2</td><td>0.0%</td><td>15,252</td><td>7</td><td>同比走弱 · 交付顺延</td></tr><tr><td>凯辉便利</td><td>单超</td><td>301,537</td><td>48.9%</td><td>58.0%</td><td>7,614</td><td>2</td><td>2</td><td>2,132</td><td>1</td><td>95,940</td><td>10,363</td><td>4.86</td><td>2</td><td>0.0%</td><td>6,898</td><td>3</td><td>交付顺延</td></tr><tr><td>壹度</td><td>高山</td><td>211,402</td><td>94.0%</td><td>-43.8%</td><td>5,193</td><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>1</td><td>0.0%</td><td>4,872</td><td>2</td><td>销售走弱 · 交付顺延</td></tr><tr><td>乐豆家便利</td><td>单超</td><td>205,590</td><td>-66.1%</td><td>-1.5%</td><td>5,002</td><td>2</td><td>3</td><td>9,627</td><td>3</td><td>401,018</td><td>19,358</td><td>2.01</td><td>3</td><td>0.0%</td><td>—</td><td>0</td><td>同比走弱 · 交付顺延</td></tr><tr><td>隆马特</td><td>高山</td><td>125,152</td><td>—</td><td>—</td><td>3,034</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>1</td><td>0.0%</td><td>3,023</td><td>1</td><td>交付顺延</td></tr><tr><td>京小盒（琼浆）</td><td>高山</td><td>106,272</td><td>-16.7%</td><td>-70.2%</td><td>2,700</td><td>1</td><td>1</td><td>5,300</td><td>2</td><td>211,845</td><td>10,333</td><td>1.95</td><td>1</td><td>0.0%</td><td>724</td><td>3</td><td>销售走弱 · 交付顺延</td></tr><tr><td>百乐</td><td>高山</td><td>0</td><td>—</td><td>—</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td><td></td><td>—</td><td>0</td><td>待观测</td></tr><tr><td>家园便利</td><td>高山</td><td>0</td><td>—</td><td>-100.0%</td><td>0</td><td>0</td><td>2</td><td>3,994</td><td>1</td><td>159,656</td><td>3,894</td><td>0.98</td><td>2</td><td>0.0%</td><td>—</td><td>0</td><td>销售走弱 · 交付顺延</td></tr><tr><td>邢台天天</td><td>高山</td><td>0</td><td>-100.0%</td><td>—</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td><td></td><td>—</td><td>0</td><td>同比走弱</td></tr><tr><td>汇宁</td><td>—</td><td>0</td><td>—</td><td>—</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td><td></td><td>—</td><td>0</td><td>待观测</td></tr><tr><td>集刻</td><td>待分配</td><td>0</td><td>-100.0%</td><td>—</td><td>0</td><td>0</td><td>1</td><td>2,484</td><td>1</td><td>113,643</td><td>9,333</td><td>3.76</td><td>0</td><td></td><td>—</td><td>0</td><td>同比走弱</td></tr><tr><td>河南美宜佳（椰子水/洋小茉）</td><td>待分配</td><td>0</td><td>—</td><td>—</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td><td></td><td>—</td><td>0</td><td>待观测</td></tr><tr><td>云南健之佳</td><td>王岩</td><td>0</td><td>—</td><td>-100.0%</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td><td></td><td>7,200</td><td>2</td><td>销售走弱</td></tr><tr><td>24客</td><td>待分配</td><td>0</td><td>—</td><td>—</td><td>0</td><td>0</td><td>0</td><td>4,989</td><td>1</td><td>201,156</td><td>13,333</td><td>2.67</td><td>0</td><td></td><td>3,049</td><td>1</td><td>待观测</td></tr><tr><td>折扣牛</td><td>待分配</td><td>0</td><td>—</td><td>—</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td><td></td><td>20,008</td><td>3</td><td>待观测</td></tr><tr><td>百望达</td><td>王岩</td><td>0</td><td>—</td><td>-100.0%</td><td>0</td><td>0</td><td>1</td><td>7,000</td><td>2</td><td>281,400</td><td>3,450</td><td>0.49</td><td>1</td><td>0.0%</td><td>1,500</td><td>2</td><td>销售走弱 · 交付顺延</td></tr><tr><td>安哒（福酱）</td><td>高山</td><td>-1,886</td><td>—</td><td>-101.1%</td><td>-46</td><td>3</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>2</td><td>0.0%</td><td>4,081 ⚠</td><td>2</td><td>去库存周期 · 销售走弱 · 交付顺延 · 退货偏高</td></tr><tr><td>供销社</td><td>高山</td><td>-11,356</td><td>-159.2%</td><td>-164.7%</td><td>-280</td><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td><td></td><td>1,367</td><td>2</td><td>销售走弱 · 同比走弱 · 退货偏高</td></tr></tbody></table></div></div>
+      </div>
+      <div id="tab-intent-active" class="tab-pane">
+        <div class="customer-table-panel"><div class="table-usage-hint">静态分享版：表格只读；勾选联动在本地系统中可用。</div><div class="static-table-wrap"><table class="static-table"><thead><tr><th>客户名称</th><th>客户负责人</th><th>9月跟进</th><th>文本提及</th><th>状态备注</th></tr></thead><tbody><tr><td>华东美宜佳（椰子水）</td><td>刘云</td><td>有</td><td>11</td><td></td></tr><tr><td>悦来悦喜</td><td>关乐乐</td><td>有</td><td>8</td><td></td></tr><tr><td>新佳宜</td><td>伍敏谊</td><td>有</td><td>2</td><td></td></tr></tbody></table></div></div>
+      </div>
+      <div id="tab-intent-silent" class="tab-pane">
+        <div class="customer-table-panel"><div class="table-usage-hint">静态分享版：表格只读；勾选联动在本地系统中可用。</div><div class="static-table-wrap"><table class="static-table"><thead><tr><th>客户名称</th><th>客户负责人</th><th>9月跟进</th><th>文本提及</th><th>状态备注</th></tr></thead><tbody><tr><td>一心便利连锁（云南）有限公司</td><td>蒋宗斌</td><td>无</td><td>0</td><td>跟胡总沟通一下我们还能不能做，能否介绍？</td></tr><tr><td>上海光明（好德/可的/良友/第一食品）</td><td>蔡琼慧</td><td>无</td><td>0</td><td></td></tr><tr><td>上海市糖业烟酒（集团）有限公司</td><td>王欣</td><td>无</td><td>0</td><td></td></tr><tr><td>中石化易捷销售有限公司</td><td>刘志华</td><td>无</td><td>0</td><td></td></tr><tr><td>云南万逸之家连锁股份有限公司</td><td>林贵华</td><td>无</td><td>0</td><td>跟胡总沟通一下我们还能不能做，能否介绍？</td></tr><tr><td>京津冀美宜佳（冰杯）</td><td>刘云</td><td>无</td><td>0</td><td></td></tr><tr><td>全家</td><td>童伟国</td><td>无</td><td>0</td><td></td></tr><tr><td>六意便利店</td><td>郑燕</td><td>无</td><td>0</td><td>抓紧对品</td></tr><tr><td>内蒙古一团火商业管理有限公司</td><td>王磊</td><td>无</td><td>0</td><td></td></tr><tr><td>十分便利店有限公司</td><td>尤祖荣</td><td>无</td><td>0</td><td>抓紧对品</td></tr><tr><td>十足集团有限公司</td><td>欧再福</td><td>无</td><td>0</td><td>持续跟进</td></tr><tr><td>友客</td><td>—</td><td>无</td><td>0</td><td></td></tr><tr><td>可多</td><td>—</td><td>无</td><td>0</td><td></td></tr><tr><td>可好便利店管理有限公司</td><td>姜珊</td><td>无</td><td>0</td><td></td></tr><tr><td>哈尔滨市融惠微利超市有限责任公司</td><td>张建廷</td><td>无</td><td>0</td><td>受限于起订量，只能1000箱</td></tr><tr><td>宽广购便利店有限公司</td><td>朱浩</td><td>无</td><td>0</td><td></td></tr><tr><td>山东优同便利店集团有限公司</td><td>李建国</td><td>无</td><td>0</td><td></td></tr><tr><td>山东潍坊百货集团股份有限公司中百连锁超市便利店</td><td>班洪花</td><td>无</td><td>0</td><td></td></tr><tr><td>山西省太原唐久超市有限公司</td><td>杨文斌、王菲菲</td><td>无</td><td>0</td><td>联系，百望达对接标品</td></tr><tr><td>左邻右舍</td><td>祝军</td><td>无</td><td>0</td><td></td></tr><tr><td>广东合家欢便利店有限公司</td><td>官智林</td><td>无</td><td>0</td><td></td></tr><tr><td>广东天福连锁商业集团有限公司</td><td>成世恩</td><td>无</td><td>0</td><td>冰棍儿</td></tr><tr><td>新疆八点半</td><td>张玉海</td><td>无</td><td>0</td><td></td></tr><tr><td>有家便利店集团有限公司</td><td>李见、史海东</td><td>无</td><td>0</td><td></td></tr><tr><td>武汉中百便利店有限公司</td><td>周彬</td><td>无</td><td>0</td><td>持续跟进</td></tr><tr><td>每日集团</td><td>张磊</td><td>无</td><td>0</td><td>洪涛约</td></tr><tr><td>江西省晋利嘉实业有限责任公司</td><td>杨翔</td><td>无</td><td>0</td><td></td></tr><tr><td>海南青子实业有限公司（罗森）</td><td>汤耀华</td><td>无</td><td>0</td><td></td></tr><tr><td>湖北黄商集团股份有限公司便民事业部</td><td>徐玉涛</td><td>无</td><td>0</td><td></td></tr><tr><td>湖南汇米巴商业管理有限公司</td><td>王湘杰</td><td>无</td><td>0</td><td></td></tr><tr><td>湖南珊珊便利有限公司</td><td>王洋</td><td>无</td><td>0</td><td></td></tr><tr><td>漳州新南丰商业连锁有限公司</td><td>陈水清</td><td>无</td><td>0</td><td></td></tr><tr><td>福建百年万嘉超市管理有限公司</td><td>杨场宝</td><td>无</td><td>0</td><td>德涛约，继续建立关系</td></tr><tr><td>福建省易太商业运营管理有限公司</td><td>吴浪军</td><td>无</td><td>0</td><td></td></tr><tr><td>罗森投资有限公司</td><td>华东</td><td>无</td><td>0</td><td></td></tr><tr><td>西安唐久便利连锁有限公司</td><td>徐斌、王晓华</td><td>无</td><td>0</td><td></td></tr><tr><td>见福便利店</td><td>张利</td><td>无</td><td>0</td><td></td></tr><tr><td>贵州勇惠</td><td>程东升</td><td>无</td><td>0</td><td>再沟通；需要解决瓶型与工厂的矛盾，考虑由耶气满满生产</td></tr><tr><td>阳光小玛特</td><td>姚云鹏</td><td>无</td><td>0</td><td></td></tr><tr><td>集百控股商业集团</td><td>张晓雨</td><td>无</td><td>0</td><td></td></tr></tbody></table></div></div>
+      </div>
+      <div id="tab-operators" class="tab-pane">
+        <div style="font-size:12px;color:#64748b;margin-bottom:8px;line-height:1.5">
+          静态分享版展示操作员汇总；完整文本交叉检索请在本地系统查看。
+        </div>
+        <div class="customer-table-panel"><div class="table-usage-hint">静态分享版：表格只读；勾选联动在本地系统中可用。</div><div class="static-table-wrap"><table class="static-table"><thead><tr><th>操作员</th><th>汇报条数</th><th>提及客户数</th></tr></thead><tbody><tr><td>单超</td><td>21</td><td>21</td></tr><tr><td>王焱</td><td>18</td><td>15</td></tr><tr><td>高山</td><td>18</td><td>16</td></tr><tr><td>李荣华</td><td>10</td><td>13</td></tr><tr><td>王岩</td><td>10</td><td>15</td></tr></tbody></table></div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">客户 / 项目联动查看</div>
+      <div style="font-size:13px;color:#334155;margin-bottom:10px">
+        当前示例客户：<strong>新天地</strong>
+        <span style="color:#94a3b8;font-size:12px">（静态页固定展示默认客户；本地可切换）</span>
+      </div>
+      <div class="detail-row-static">
+        <div class="panel detail-panel detail-panel-body">
+          <div class="panel-title">业财单据核对 · 新天地</div><div><div style="font-size:12px;font-weight:600;margin-bottom:6px">对账摘要</div><div class="memo-box">本月天财已出库 79,576 箱，ERP 物流 15,400 箱，差额 64,176 箱（原因待核实，不作归因）。</div><div style="font-size:12px;color:#64748b;margin-top:8px">天财 79,576 箱 / ¥3,446,955 · ERP 15,400 箱 · 运费 ¥30,056 · 排产项目 1 个</div></div><hr style="margin:12px 0" /><div style="font-size:12px;font-weight:600">参考单据（供逐笔核对）</div><div style="margin-bottom:8px"><span class="tag tag-gray">天财单据参考</span><div style="font-size:12px;margin-top:4px">新天地：天财 9月相关单据 21 张（供核对参考）</div><div style="font-size:11px;color:#94a3b8;margin-top:2px">ZXWX00001964, ZXWX00001965, ZXWX00001966, ZXWX00001967, ZXWX00001968, ZXWX00001984, ZXWX00001986, ZXWX00001987</div></div><div style="margin-bottom:8px"><span class="tag tag-gray">ERP单号参考</span><div style="font-size:12px;margin-top:4px">新天地：ERP 9月项目关联单号 3 个（供核对参考）</div><div style="font-size:11px;color:#94a3b8;margin-top:2px">ZXWX00001680, ZXWX00001737, ZXWX00001779</div></div><hr style="margin:14px 0" /><div class="panel-title">新天地 · 多法人主体分列（合并展示）</div><div class="entity-note">ERP 统一归集为「新天地」，天财侧按付款方集团分法人入账，下表供对账参考。</div><div style="font-size:12px;margin-bottom:4px">吉林省新天地超市连锁经营有限公司：出库 ¥1,965,375 / 45,625 箱 / 10 单</div><div style="font-size:12px;margin-bottom:4px">沈阳新天地超市连锁企业经营管理有限公司：出库 ¥714,960 / 16,239 箱 / 4 单</div><div style="font-size:12px;margin-bottom:4px">哈尔滨市新天地超市有限公司：出库 ¥558,090 / 12,753 箱 / 4 单</div><div style="font-size:12px;margin-bottom:4px">江苏新天地连锁超市有限公司：出库 ¥208,125 / 4,950 箱 / 2 单</div>
+        </div>
+        <div class="panel detail-panel detail-panel-body">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span class="panel-title">文本交叉检索 · 新天地</span><button class="ms-2" style="font-size:11px;vertical-align:middle">重新生成分析</button></div><div class="synthesis-box"><div class="synthesis-source-label">AI 综合提炼（本期已存档）</div><div class="synthesis-md"><h3>综合判断</h3>
+<p>9月新天地风味椰子水（茉莉、青瓜）与368ml原味三规格同步放量，天财入账79,576箱、¥344.7万，较8月激增602%，印证新品上市首周PSD启动有效；ERP物流侧同步完成368ml 15,400箱发货，节奏覆盖9月上中下旬，渠道动销信号明确；客诉、残损及开票对账等商务闭环事项持续推进，未影响当期供货主脉络。</p>
+<h3>9月量化画像</h3>
+<p>天财已入账：79,576箱（¥344.7万），含420mL茉莉椰子水28,689箱、420mL青瓜椰子水27,987箱、368ml原味椰子水22,900箱，共21.0张出库单；入账节奏为09/01（66,876箱）、09/08（10,000箱）、09/24（2,700箱）。<br />
+ERP物流已发：15,400箱（368ml原味），分4次发货（09/05、09/18、09/21各批次），签收确认已于9月30日完成。<br />
+业财箱数差额：64,176箱（79,576 − 15,400）。</p>
+<h3>业务要点</h3>
+<ul>
+<li>新天地风味椰子水（茉莉+青瓜）正式上市，首周PSD落地，成为9月天财入账主力；  </li>
+<li>风味系列客诉处理、到货残损沟通及多轮对账开票持续跟进，8月底至9月中密集闭环；  </li>
+<li>背标委托/受托方信息确认推进中，涉及新协议签署，高山正与客户直接对接；  </li>
+<li>368ml标签修改、1L标签设计等包装协同事项已于8月底启动，支撑后续规格延展。</li>
+</ul>
+<h3>需关注</h3>
+<p>新天地368ml与420ml风味品项在ERP发货与天财入账间存在显著口径差额（64,176箱），且无材料指向具体成因或预计闭合节点，需财务与物流协同厘清。</p></div></div><div class="panel-meta">索引命中 40 条（展开可看原文）</div><div class="text-hits-details"><div>▸ 原始文本命中（共 40 条，点击展开）</div><div class="text-hits-root"><div class="text-hits-source-details"><div>日报 · 13 条</div><div class="text-hits-scroll"><div style="margin-bottom:12px"><div class="text-meta">高山 · 2026-08-28 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">新天地原味，风味椰子水款项核对，开票。</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">1、新天地原味，风味椰子水款项核对，开票。各仓9月份订单已确认。
+2、京小盒7月份订单尾款跟进，9月份订单计划已确认。
+3、超市发小椰轻椰子水到货，协调入仓，装卸，垫付费用。
+4、每一天风味椰子水沟通到仓时间，首批上新补贴政策确认（最多100件）。
+5、每日隆尾款已回，核对账款开票，确认9月份订单数。
+6、邻几椰子水待回款金额核对，开票，跟进尾款。
+7、安哒沟通1L装椰子水赔偿方案，按补偿200件商品沟通，采购下周与公司汇报后给到结论反馈。
+8、供销优选订单及回款进度跟进，待反馈，暂无实质性结论。
+9、24客9月份1L订单增至5000件，同步沟通确认排产时间。
+10、壹度跟进尾款到账，协调开票。确认9月份订单排产计划。
+</div></div></div><div style="margin-bottom:12px"><div class="text-meta">单超 · 2026-08-31 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">到货跟进，验收单确认（哈尔滨新天地、沈阳新天地及内蒙古安哒）验收单确认（哈尔滨新天地、沈阳新天地及内蒙古安哒）</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">1、凯辉卸货费提交及支付
+2、协助卫老师完成企业微信邮箱注册及调整
+3、每一天郑州、乐豆家找车、询价
+4、到货跟进，验收单确认（哈尔滨新天地、沈阳新天地及内蒙古安哒）
+5、发货明细同步小韩及卫老师
+6、验收单电子版及验收单打印并同步小韩
+7、邮寄凯辉样品（电解质水、抹茶香椰乳）
+8、其企业微信更改审批流及测试
+9、邻几对账跟进（已核对完成）
+10、集客420ml青瓜椰子水价格确认3.05元/瓶
+11、乐豆家标签沟通、索要转曲图及转曲文件
+12、唐山家万佳沟通退货费及其他费用
+</div></div></div><div style="margin-bottom:12px"><div class="text-meta">高山 · 2026-08-31 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">新天地风味椰子水客诉处理，对账开票，到货残损沟通。</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">1、每一天郑州仓椰子水发货。
+2、邻几芜湖仓椰子水退货处理。
+3、新天地风味椰子水客诉处理，对账开票，到货残损沟通。
+4、邻几对账，开票，跟进尾款。
+5、Today武汉仓，合肥仓椰子水发货，确认订单数。
+6、壹度，每日隆椰子水跟进开票。
+7、24客确认1L装排产计划，新工厂资质确认。
+8、安哒1L装椰子水赔付方案跟进确认。
+</div></div></div><div style="margin-bottom:12px"><div class="text-meta">王焱 · 2026-08-31 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">新天地1L标签设计和368标签修改。</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">1、生产计划：
+     锦鸿在产today420椰子水今天全部产完，乐豆家加急改标签3号生产；
+     风味椰子水华跃生产，每一天茉莉椰子水已经产完，接续产today、集刻、每一天青瓜椰子水，预计明天早晨全部可以产完待检发货。
+     出口椰子水确定在9月10日生产。
+2、新天地1L标签设计和368标签修改。
+3、百望达对账付款。
+4、与无聊椰、华跃三方合同沟通修改。
+5、9月份计划收集整理初稿发锦鸿排产；
+</div></div></div><div style="margin-bottom:12px"><div class="text-meta">高山 · 2026-09-01 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">新天地</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">1、每一天风味椰子水（青瓜/茉莉）发货。原味椰子水发货，核对账单。
+2、邻几账单核对，发票核对，提醒财务入账。
+3、供销优选开票与财务确认。
+4、邻几合肥仓1L装椰子水退货处置。
+5、京小盒预付款核对，跟进开票时间。
+6、24客沟通验厂时间（下周二）。
+7、安哒回款核对，剩余尾款及9月份订单跟进。
+8、Today尾款跟进，武汉南宁确认发货及到仓时间。
+9、新天地，每日隆开票沟通，事项申请。
+</div></div></div><div style="margin-bottom:12px"><div class="text-meta">王焱 · 2026-09-01 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">新天地1L标签设计和368标签修改。</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">1、生产计划：
+     锦鸿在产today420椰子水全部产完，乐豆家加急改标签3或4号生产；
+     风味椰子水华跃生产完成。
+     出口椰子水确定在9月10日生产，增加9月30日另一次生产。
+2、新天地1L标签设计和368标签修改。
+3、无聊椰对账。
+4、9月份计划收集整理初稿发锦鸿排产；
+</div></div></div><div style="margin-bottom:12px"><div class="text-meta">高山 · 2026-09-02 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">新天地长春仓原味椰子水发货，1L装设计效果图确认。</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">1、邻几退货沟通处理，报损商品处理补贴支持2000元。
+2、首航仓储费，运费，拍位费核对。
+3、超市发整理工厂资料，批次检测报告，同位素检测等，退货确认提货时间。
+4、新天地长春仓原味椰子水发货，1L装设计效果图确认。
+5、Today新品抹茶香椰乳沟通。
+6、24客椰子水客诉处理，验厂时间确认。
+7、供销优选开票事项申请。
+</div></div></div><div style="margin-bottom:12px"><div class="text-meta">单超 · 2026-09-03 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">长春新天地找车，询价；邮寄新天地香椰乳样品</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">1、到货跟进，验收单确认（郑州每一天、合肥邻几、芜湖邻几、青岛出口）
+2、小椰轻退货跟进，今日已完成退货
+3、协助小韩完成供销社发票申请、出库核对及开票明细等
+4、集刻沟通第三方检测申请（第三方检测报告出来后才能发货，已同步王焱）
+5、凯辉二次标签打样沟通，已在群内告知目前的问题及情况，需要王焱协助印厂确认处理并回复客户
+6、乐豆家同步420ml检测报告及420ml椰子水起订量及生产跟进，预计7号发货
+7、集客三方合同跟进，已同步李总最新更改版本，没问题后工厂签署后寄出
+8、乐豆家三方合同已发，等乐豆家确认
+9、长春新天地找车，询价
+10、邮寄武汉today茉莉椰子水及抹茶香椰乳样品
+11、邮寄印厂样瓶及标签
+
+
+补9月2日日报，漏提交了
+1、运满满运费预存（9车运费）
+2、运满满开票及打印发票同步黄会计
+3、小椰轻退货费用同步及反馈
+4、到货预约（乐豆家、合肥邻几、芜湖邻几、西安每一天、武汉及南宁today）
+5、乐豆家三方合同同步余久丽等待确认
+6、邮寄新天地香椰乳样品
+7、健之佳厂检报告同步（6.08批次，客户有客诉）
+8、协助王焱盖章（设计服务合同及多乐多出库单）
+9、小椰轻退货解决（明日安排车辆去拉退货，费用从货款抵扣）
+</div></div></div><div style="margin-bottom:12px"><div class="text-meta">单超 · 2026-09-04 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">长春新天地找车找车、询价（2车）</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">1、协助高山完成每日隆单据制作并发给高山
+2、长春新天地找车、询价（2车）
+3、每一天新品拍照、新品走流程添加新品
+4、发货明细同步小韩及卫老师
+5、验收单电子版及验收单打印并同步小韩
+6、协助王焱盖章（出库单）
+7、乐豆家合同填写完成同步余久丽（已发，等乐豆家法务审核）
+8、到货跟进，验收单确认（乐豆家、西安每一天3车、武汉today）
+9、同步高山每一天椰子水工厂信息及条码（琼浆建品使用）
+10、乐豆家9月定制椰子水计划确认（已发高山）
+11、天财新品申请提交（已提交每一天风味椰子水新品新增）
+</div></div></div><div style="margin-bottom:12px"><div class="text-meta">单超 · 2026-09-07 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">运满满运费预存（长春新天地2车。；长春新天地及南昌乐豆家到货预约</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">1、凯辉对账（客户已回款、等王总确认）
+2、运满满运费预存（长春新天地2车。南昌乐豆家1车及南宁today压车费）
+3、邻几对账单价及验收单梳理，协助高山完成，客户对账使用
+4、长春新天地及南昌乐豆家到货预约
+5、凯辉椰子水回款对账及事项申请
+6、乐豆家椰子水未回款也未出账单，已联系乐豆家财务及采购，本周确认，继续跟进
+7、武汉today找车、询价
+8、凯辉定制款泉水（巴马与诺好合同跟进，已发李总进行确认）
+9、协助小韩完成小椰轻入库单及附件操作
+
+</div></div></div><div style="margin-bottom:12px"><div class="text-meta">高山 · 2026-09-07 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">新天地哈尔滨仓，沈阳仓沟通发货时间，长春仓到货确认。</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">1、新天地哈尔滨仓，沈阳仓沟通发货时间，长春仓到货确认。
+2、健之佳沟通库存明细，确认发货时间。
+3、邻几椰子水标签设计沟通，替换金标卖点。
+4、汇宁便利同步同位素检测，工厂资质。
+5、壹度确认发货时间，青瓜椰子水包装箱批次日期模糊沟通。
+6、Today客户赔偿，茉莉风味椰子水确认合作启动标签设计，约见拜访。
+7、每一天库存核对，账单核对，跟进回款时间。HPP柑橘汁待回货款跟进确认。
+8、京小盒椰子水发货，剩余库存统计。
+9、24客沟通验厂流程及准备资料。
+</div></div></div><div style="margin-bottom:12px"><div class="text-meta">单超 · 2026-09-08 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">长春新天地2车收货跟进（已验收）</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">1、运满满找车发货（武汉today、西安京小盒）
+2、运满满运费预存（武汉today、西安京小盒）
+3、长春新天地2车收货跟进（已验收）
+4、邮寄椰子水样品（平台下单及同步工厂）
+5、运满满运费开票，打印发票并同步黄会计电子版）
+6、发货明细同步小韩及卫老师
+7、验收单电子版及验收单打印并同步小韩
+8、乐豆家到货沟通（工厂将2拍192箱货错装到其他车上，预计10号能送到乐豆家）
+9、邮寄乐豆家420ml椰子水1箱到总部当样品
+</div></div></div><div style="margin-bottom:12px"><div class="text-meta">高山 · 2026-09-14 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">新天地哈尔滨仓开票核对，长春仓椰子水开票跟进。</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">1、每一天椰子水（风味/原味）对账，发货，结算。
+2、供销优选对账，跟进结算。
+3、健之佳沟通椰子水发货。
+4、新天地哈尔滨仓开票核对，长春仓椰子水开票跟进。
+5、邻几发货，罚款开票沟通，结算跟进。
+6、24客退仓数量核对跟进。
+7、超市发验收单安排邮寄回公司，确认结算流程。
+8、安哒品质问题椰子水赔付方案沟通。
+</div></div></div></div></div><div class="text-hits-source-details"><div>周报 · 1 条</div><div class="text-hits-scroll"><div style="margin-bottom:12px"><div class="text-meta">李荣华 · 2026-08-31 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">1.新天地椰子水-+上市，首周PSD</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">1.新天地椰子水-+上市，首周PSD2，下周进行大促，预计PSD到10.
+2.每一天椰子水+相关事项确认，与客户沟通上市支持等事项。
+3.小椰轻换货，在质检环节的标准化要求需要制定具体的标准。
+4.通过及时的与锦鸿沟通，实现了420ml的转产，保证客户的交货时间。
+</div></div></div></div></div><div class="text-hits-source-details"><div>正式回复 · 26 条</div><div class="text-hits-scroll"><div style="margin-bottom:12px"><div class="text-meta">王岩 · 2026-09-15 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">2. 新天地（打样/定版推进） 高山/王焱侧当前进展与阶段结果如何：已确认</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 凯辉（打样/定版推进） 王焱对最终交付日期的确认情况如何：风味椰子水标贴已确认，外箱正在配色；矿泉水签字稿已发客户，待签字排产
+2. 新天地（打样/定版推进） 高山/王焱侧当前进展与阶段结果如何：已确认
+3. 健之佳（420ml交付） 工厂/质量侧最新进展是什么：请高山明日汇报。
+4. Today（客诉处置） 工厂/质量侧最新进展是什么：请高山明日汇报
+5. 壹度（客诉理赔与费用） 工厂/质量侧最新进展是什么：请高山明日汇报
+6. 24客（质量检测与赔偿） 工厂/质量侧最新进展是什么：验厂已通过，待重新签订合同。目前先恢复1L装
+
+【自补充】
+1. 华东美宜佳，已报价。客户收到样品，待反馈
+2. 健之佳申请1万箱促销，单瓶补贴0.1元，待与李总沟通
+3. 需要关注絮状物的客诉，应及时给予官方的函告，请李总特别关注
+4. 巴马诺好合同，需要跟进，请单超特别关注，明日汇报进度</div></div></div><div style="margin-bottom:12px"><div class="text-meta">李荣华 · 2026-09-15 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">4. 新天地｜新天地沈阳门店上架异常（疑似浑浊/霉团）问题，实际处理结果，后续是否有遗留问题：同问题1</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. Today｜Today椰子水絮状物客诉（9月7日诉求赔偿100元）：已关注，和原料方，工厂在调查发生问题的可能性原因。
+2. 凯辉｜背标双面工艺打样方案与生产排产影响：已确认，排产在20多号，具体时间再确认后回复
+3. 健之佳｜20260622批次420ml椰子水：已给到工厂的自检自查报告说明，目前看是个别现象，持续关注
+4. 新天地｜新天地沈阳门店上架异常（疑似浑浊/霉团）问题，实际处理结果，后续是否有遗留问题：同问题1
+5. 壹度｜壹度椰子水絮状物（第3瓶，9月10日）：同问题1
+6. 生产侧｜壹度椰子水20260723批次生产日期模糊问题：已和工厂沟通解决
+
+【自补充】
+1. 24客确认换圆瓶，并在七方杯工厂生产，目前在修改标签和确认新合同。</div></div></div><div style="margin-bottom:12px"><div class="text-meta">高山 · 2026-09-15 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">3. 新天地｜待确认：沈阳门店上架异常产品已处理，暂未造成顾客投诉，门店上架发现直接买单。；6. 新天地｜新天地沈阳门店椰子水上架异常（9月8日门店反馈）：已处理，暂未造成顾客投诉，门店上架发现直接买单。</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 凯辉｜有缺口：单超在对接
+2. 邻几｜有缺口：邻几9月份订单1L*11000件，368ml*8500件，需把剩余旧包材使用完再正常平替新包材，新版包材设计已和客户确认，工厂端会根据旧包材剩余情况，同步平替新包材。
+3. 新天地｜待确认：沈阳门店上架异常产品已处理，暂未造成顾客投诉，门店上架发现直接买单。1L装打样暂时还没有结论，客户营运部觉得价格有问题在与采购部做沟通权衡，确认后再给反馈信息。
+4. Today｜Today椰子水絮状物客诉（9月7日诉求赔偿100元）：处理结果：已处理，支付客诉费用100元整。
+5. 壹度｜壹度椰子水絮状物（第3瓶，9月10日）：已处理，支付客诉费用50元整，问题函已出具，此客户已解决。
+6. 新天地｜新天地沈阳门店椰子水上架异常（9月8日门店反馈）：已处理，暂未造成顾客投诉，门店上架发现直接买单。
+
+【自补充】
+1. Today武汉椰子水发货，每一天西安仓发货。
+2. 各系统跟进回款，每一天对账，24客合作协议及标签设计沟通确认。</div></div></div><div style="margin-bottom:12px"><div class="text-meta">王焱 · 2026-09-15 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">4. 新天地｜新天地1L标签：业务回复暂时不确认</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 每一天｜每一天风味椰子水（青瓜/茉莉）：时间尚未回复确定时间
+2. 凯辉｜凯辉新版背标：今天标签和包装箱全部确认完毕开始制作
+3. 邻几｜邻几1L/368ml新版标签及包装箱：标签还需打样进一步确认效果，预计9月16日完成
+4. 新天地｜新天地1L标签：业务回复暂时不确认
+5. 乐豆家｜乐豆家420ml椰子水：能否正常排产：已经产完
+6. 健之佳｜20260622批次420ml椰子水：工厂已经回复报告交业务
+7. 壹度｜批次椰子水：客户已经将问题产品废弃无法寄回工厂进行检测回复
+8. 壹度｜絮状物（第3瓶）：前期反馈的有两瓶已经开封无法确认问题原因，第3瓶问题产品客户自行废弃无法进一步检查问题原因
+
+【自补充】
+1. 24客1L包装调整，客户已经确认安排生产
+2. 出口椰子水追加计划，最终在9月17日确认订单
+3. 凯辉标签增加烫金、正背印工艺导致标签采购成本增加</div></div></div><div style="margin-bottom:12px"><div class="text-meta">高山 · 2026-09-16 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">1. 王焱：[等待中] 新天地1L标签：业务回复暂时不确认：标签设计已确认，产品上架后置，待客户确认后再重新启动。</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 王焱：[等待中] 新天地1L标签：业务回复暂时不确认：标签设计已确认，产品上架后置，待客户确认后再重新启动。
+2. Today｜武汉椰子水发货（进行中）：已发货
+3. 每一天｜西安仓发货（进行中）：已发货
+4. 各系统｜回款跟进（进行中）：各系统陆续回款中
+5. 每一天｜对账（进行中）：已核对清晰，待回款金额：129717.2元整，等待客户回款。
+6. 24客｜合作协议及标签设计沟通确认（进行中）：标签已确认，协议因增加部分条款，客户法务按驳回处理，沟通中。</div></div></div><div style="margin-bottom:12px"><div class="text-meta">王岩 · 2026-09-16 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">1. 王焱：[等待中] 新天地1L标签：业务回复暂时不确认：目前知晓的是标签确认，但是否生产还没有定论。</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 王焱：[等待中] 新天地1L标签：业务回复暂时不确认：目前知晓的是标签确认，但是否生产还没有定论。请高山给予回答
+2. 华东美宜佳｜样品反馈（等待中）：本周末，客户与采购沟通价格。明日沟通样品情况
+3. 24客｜合同重签与1L装恢复（等待中）：建立倒排上市时间表。并节点跟踪。建议李总与王焱明日出具倒排工期表。
+
+【自补充】
+1. 天津中国冰品展交流
+2. 河南众旺：冰杯（安徽、徐州、山东），零食渠道提案及样品。初步沟通160g 0.8含税到岸。后续跟进
+3. 河南众旺：零食渠道抹茶椰子水提案、玉米汁提案。
+4. 27年新品：711 同款冰棍的开发、沙冰杯的开发。跟随百旺达的开发节奏，同步推进我们的渠道。</div></div></div><div style="margin-bottom:12px"><div class="text-meta">李荣华 · 2026-09-17 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">3. 新天地｜背标委托/受托方信息确认：信息已收到，需要再和对方沟通，受托方只能是工厂，这周确认</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 邻几｜包装修改待确认：昨日已和客户业务沟通，待对方确认，诺好业务跟踪
+2. 乐豆家｜三方协议确认签署：乐豆家这边王总再和黄总沟通，下一步的计划，原味椰子水三方合同可以签署了，椰子水+再沟通一下。
+3. 新天地｜背标委托/受托方信息确认：信息已收到，需要再和对方沟通，受托方只能是工厂，这周确认
+4. 好佳一（样品安排）：已安排，周六跟踪客户是否收到
+5. 24客（合同重新确认，1升排产协调）：计划21号安排生产
+6. 24客（换圆瓶并在七方杯工厂生产）：已确认完毕
+
+【自补充】
+1. 每一天青瓜椰子水按照中秋节交货排产，已和无聊椰沟通确认。
+2. 抹茶香椰乳样品沟通，下周一寄出再分别和客户邮寄。
+3. 邻几补充合同需要重新沟通合同条件，本月需要完成。</div></div></div><div style="margin-bottom:12px"><div class="text-meta">高山 · 2026-09-17 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">1. 新天地沈阳仓发货</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 邻几｜包装修改待客户确认：已签字确认，新标签设计事项完结。
+2. 每日隆/天天｜标签修改待客户确认：已和客户沟通，已确认可修改调整。
+3. 各系统（回款跟进）：陆续回款中，Today计划本周五回款20万+
+4. 每一天（对账）：已与客户沟通，中秋节前回款。
+
+【自补充】
+1. 新天地沈阳仓发货，24客合作协议已确认，工厂盖章中。
+2. 安哒退仓数量确认，同步跟进回款情况，好邻居尾款跟进，Today包材卡扣协助客户采购。</div></div></div><div style="margin-bottom:12px"><div class="text-meta">单超 · 2026-09-18 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">2. 新天地｜找车发货：已发出</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 集刻｜找车发货：已发出
+2. 新天地｜找车发货：已发出
+3. 巴马诺好｜合同跟进：已邮寄
+4. 运满满运费预存（是否已支付）：已支付
+5. 漫星咖（对账）：已完成对账，预计下周付款
+6. 小椰轻（7、8月对账）：等待开票中
+7. 京东快递费及重货快递费：已审批、已支付
+
+【自补充】
+1. 支付跨越8月运费
+2. 发货明细同步小韩及卫老师
+3. 验收单电子版及验收单打印并同步小韩
+4. 司机赔付确认
+5. 集刻椰子水回款（已到账）
+6. 质量问题赔付申请校对审批流
+7. 给百望达邮寄合同（周日邮寄）</div></div></div><div style="margin-bottom:12px"><div class="text-meta">高山 · 2026-09-18 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">1. 新天地沈阳仓发货；新天地标签设计委托方信息确认。</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 各系统（回款跟进） today是否已完成：今天未回，客户账户金额不够，继续跟进回款。
+2. 邻几｜邻几1L装退货1L装椰子水5501瓶整：已闭环，工厂端承担该批问题商品成本，召回库存已与客户沟通直接原地报损。
+3. 安哒｜安哒1L装召回残损未退（多退8件）：已闭环，确认为最终数量，实际退仓2074件（比原来2066件多退8件）此8件商品成本由工厂承担，给诺好补货。
+4. 安哒（跟进回款）：暂未回款，跟进中。
+5. 好邻居（尾款跟进）：暂未回款，跟进中。
+6. 客户（包材卡扣采购协助）：已闭环，卡扣的线上店铺和对应成本已分享给客户，客户自己安排采购。
+7. 每一天（对账）：暂未回款，客户确认中秋节前可安排回款。
+
+【自补充】
+1. 新天地沈阳仓发货，预约拜访西安每一天。
+2. 雄安百乐定制白酒订单下单，等待客户付款。每一天风味椰子水到仓包装箱破损处理沟通（已闭环）24客1L装标签设计同步沟通确认，新天地标签设计委托方信息确认。</div></div></div><div style="margin-bottom:12px"><div class="text-meta">单超 · 2026-09-21 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">3. 沈阳新天地到货预约（今日已到仓）；0. 新天地哈尔滨仓发货，368ml椰子水*2700件，已发车</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 邻几｜合肥/芜湖仓发货物流协调：合肥已发货，芜湖在找车
+2. 巴马诺好｜合同跟进：巴马端反馈：客户已收到
+3. 给百望达邮寄合同（周日邮寄）：客户已收到
+4. 小椰轻（7、8月对账后续进程跟进）：已完成对账
+
+【自补充】
+1. 乐豆家定制品对账（周一出账单，可开发票）2、易凯退货1箱果汁、下次少付款（系统已操作退货）
+2. 集刻送货预约，卸货工人联系（今日已到仓）
+3. 沈阳新天地到货预约（今日已到仓）
+4. 运满满开票，打印纸质发票并同步黄会计
+5. 小椰轻发票开具，付款申请支付（预计30号付款）
+6. 漫星咖对账确认（等待客户开票，预计30号付款）
+7. 唐山家万佳事项申请（关于椰子水日期一擦就掉的赔付）已提交
+8. 天财系统新品新增（已提交，等待审批）
+9. 青岛出口椰子水发货跟进，明日发车
+10. 新天地哈尔滨仓发货，368ml椰子水*2700件，已发车
+11. 协助王焱盖章出库单、扫描文件同步</div></div></div><div style="margin-bottom:12px"><div class="text-meta">王焱 · 2026-09-21 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">6. 新天地｜沈阳门店买赔：工厂品控在评价未回复  【自补充】</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 每一天｜青瓜风味椰子水368ml：计划22号生产每一天青瓜椰子水，接续生产凯辉茉莉椰子水
+2. today茉莉椰子水（包装修改跟进）：客户今天未回复改后文件
+3. 跟进新工厂七方杯生产事宜：9月21日夜或22日凌晨生产
+4. 每一天｜后续包材/瓶型替换：还没完成生产资材待统计
+5. 每一天｜1L质检报告：已发
+6. 新天地｜沈阳门店买赔：工厂品控在评价未回复
+
+【自补充】
+1. 新工厂七方杯前期椰子水生产过程中也有过质量问题尚未明确原因，增加了预防措施有改善；标签打检设备有问题无法按要求执行打检识别形成有效控制现场无法调整，增加目检人员后段检测；
+2. 7S抹茶香椰乳标签修改，更换委托方信息等
+3. 与百望达对账已经完成其中锦鸿产420椰子水已确认盖章并发送给百望达。9月份风味椰子水已盖章尚未发送给百望达。</div></div></div><div style="margin-bottom:12px"><div class="text-meta">王岩 · 2026-09-22 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">4. 新天地（包装改版（委托方/条码） 高山侧当前确认结果如何：包装已确认，委托方还未确认，高山在沟通。；5. 新天地（客诉处置） 工厂/质量侧有无反馈：目前还未有更深层册的反馈</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 壹度啤酒（降价要求与供货价条款） 沟通周总阶段结果如何：还未沟通 。厂家已明确12入和6入价格一致。
+2. 24客（合同盖章进度） 高山回：好的 加入备忘 。跟进
+3. 抹茶椰乳（中试与后续生产交接） 建群对接后当前进展与阶段结果如何：目前卡点在北川的授权，工厂安排29日中试，跟进中
+4. 新天地（包装改版（委托方/条码） 高山侧当前确认结果如何：包装已确认，委托方还未确认，高山在沟通。对价格还没确认。加入备忘。跟进
+5. 新天地（客诉处置） 工厂/质量侧有无反馈：目前还未有更深层册的反馈
+6. 于涛总（材料对齐进度）：第一次材料已沟通。访京日程定在27日
+7. 凯辉（风味椰子水生产进度通报）：未改变，依照排产进行
+8. 折扣牛返利（核算支付与业务对接人安排）：已在对帐中
+9. 悦来悦喜（工厂对接流程的责任人是否确认与明确交接）：客户已收活。又下了订单。王焱还未交接。
+10. 健之佳（已生产产品交付是否已沟通）：造成库存，客户明确不收货。节后再跟进。
+11. 华东美宜佳（样品测试后的反馈跟进）：客户报价2.2，还要有10%的利润，经与李总沟通，针对低价商品诺好不做，有风险。同意李总意见。我再沟通客户
+12. 河南众旺（冰杯（安徽、徐州、山东），抹茶椰子水、玉米汁提案，后续推进）：陆续跟进
+13. 27年新品（711 同款冰棍、沙冰杯的开发，待会后跟进进展）：待讨论。
+14. 凯辉（凯辉新品需求与提案，跟进样品）：加入备忘。李总还未反馈样品一事
+15. 云南连锁协会（11月展会联合参展）：参展</div></div></div><div style="margin-bottom:12px"><div class="text-meta">高山 · 2026-09-22 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">4. 新天地｜沈阳门店买赔：已给门店买赔完结，工厂暂未有该问题商品结论信息。；7. 新天地（标签设计委托方信息确认）：待确认中，需沟通受委托方信息及重新签约协议。</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 邻几｜对账开票与合作模式：签约新协议之前，已确认按照返利前开票，新版协议11月底前正常可签约，合作模式在沟通确认中。
+2. 24客｜合同盖章进度：等待工厂盖章中，已跟进进度。
+3. 每一天｜待确认：生产反馈，每一天青瓜椰子水计划23号可安排生产完。
+4. 新天地｜沈阳门店买赔：已给门店买赔完结，工厂暂未有该问题商品结论信息。
+5. 雄安百乐（定制白酒订单下单，等待客户付款）：已付款完结。
+6. 24客（1L装标签设计同步沟通确认）：标签设计已确认，生产中。
+7. 新天地（标签设计委托方信息确认）：待确认中，需沟通受委托方信息及重新签约协议。
+8. 各系统（回款跟进/today进展）：暂未回款，预计本周内可安排陆续回款。
+9. 好邻居（尾款跟进）部分已回款，尾款跟进中。：暂时还没有结论，联系不上对接人。
+
+【自补充】
+1. 邻几合肥仓，芜湖仓发货，新天地哈尔滨仓发货。
+2. 超市发账单核算，重新开具发票。邻几账单开票。</div></div></div><div style="margin-bottom:12px"><div class="text-meta">李荣华 · 2026-09-22 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">5. 新天地（背标委托/受托方信息确认，涉及新协议签署）：高山和客户沟通  【自补充】</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 邻几｜对账开票与合作模式：新合同未续签前按照老合同执行 已安排业务和财务先按此执行
+2. 711｜抹茶香椰乳标签需要重新修改确认：标签需重新修改确认 今天在和客户核对后签字确认
+3. 凯辉（三柠水产品开发样品进展）：工厂回复由于生产量的问题，原来好佳一样品暂缓，再重新联系
+4. 乐豆家（三方协议及商品推进情况）：明天落实原味合同
+5. 新天地（背标委托/受托方信息确认，涉及新协议签署）：高山和客户沟通
+
+【自补充】
+1. 百望达计划做椰子水+产品，明天前需要落实报价</div></div></div><div style="margin-bottom:12px"><div class="text-meta">高山 · 2026-09-22 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">2. 新天地｜新天地｜包装改版（委托方/条码）：新天地标签设计受委托方信息确认及重新签约协议。；2. 新天地风味椰子水对账</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 24客｜合同盖章进度：等待工厂盖章中，已跟进进度。 工厂盖章中，还未回寄给诺好，在跟进进度。
+2. 新天地｜新天地｜包装改版（委托方/条码）：新天地标签设计受委托方信息确认及重新签约协议。 暂未确认，涉及修改受托方信息及重新签约协议，客户内部还在同步确认。
+3. 邻几｜对账开票与合作模式：签约新协议之前，已确认按照返利前开票，新版协议11月底前正常可签约，合作模式在沟通确认中。 开票事宜已确认，该环节完毕。新版协议同步确认中。
+4. 天天/每日隆｜包装箱修改待客户确认：客户已确认。
+5. 每一天（跟进生产如期完成并发货）：青瓜暂未生产完，还没有入库数量，等王炎反馈。
+6. 各系统（回款跟进/today进展）：预计本周五前会安排部分回款。
+7. 每一天（对账）：预计本周五之前会安排部分回款。
+8. 安哒（跟进回款）：跟进中。
+9. 好邻居（尾款跟进）：跟进中。
+
+【自补充】
+1. 每一天风味椰子水发货，京小盒1L装椰子水发货，超市发发票及验收单邮寄。
+2. 新天地风味椰子水对账，Today原味椰子水对账。</div></div></div><div style="margin-bottom:12px"><div class="text-meta">王岩 · 2026-09-22 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">2. 新天地（新天地｜包装改版）：持续跟进</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. Today（茉莉味椰子水设计稿客户确认推进请关注，9月7日至今尚未有确定结果） 高山/王焱侧当前进展与阶段结果如…：高山反馈一下目前进度和卡点
+2. 于涛总（材料对齐进度）：无
+3. 折扣牛返利（核算支付与业务对接人安排）：已在对帐中
+4. 悦来悦喜（工厂对接流程的责任人是否确认与明确交接）：新订单2500箱已下。交割未启动
+5. 健之佳（已生产产品交付是否已沟通）：还没沟通
+6. 华东美宜佳（基于过低报价的后续客户再沟通）：此价格椰子水我们做不了。维持关系。
+7. 河南众旺（冰杯、抹茶椰子水、玉米汁提案，待推动）：椰乳样品刚到，明日安排邮寄样品。
+8. 27年新品（711 同款冰棍、沙冰杯的开发，待推动）：中秋期间开会讨论
+9. 凯辉（凯辉新品需求与提案，跟进样品）：请李总提供样品及合作方式、报价
+10. 24客（24客｜合同盖章进度跟踪）：持续跟进
+11. 抹茶椰乳（抹茶椰乳｜中试与后续生产交接）：今日与百望达沟通，明日确定
+12. 新天地（新天地｜包装改版）：持续跟进</div></div></div><div style="margin-bottom:12px"><div class="text-meta">王焱 · 2026-09-22 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">9. 新天地｜沈阳门店买赔：工厂赔付样品需寄回工厂做进一步分析研判  【自补充】</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 每一天｜青瓜排产窗口：23日凌晨开始
+2. 新工厂七方杯（质量问题及打检设备异常的后续进展）：前期加工椰子水产品出现批量黑色异物沉淀，目前尚无结论，工厂加强前端原料的过滤仍未彻底杜绝问题发生。相关设备需要进行改造升级才可适应透明标签打检。
+3. 跟进新工厂七方杯生产事宜（是否已进行生产，生产结果如何）：24客已经生产完，部分隔离产品需要返检返工，预计24日完成。
+4. 7S抹茶香椰乳（标签修改推进进度）：22号出营养成分报告，客户审核后有需要调整的细节，预计9月23日完成修改后交客户复审；
+5. today茉莉椰子水（包装修改跟进）：已催问客户未答复
+6. 百望达对账（9月份风味椰子水）：已完成
+7. 每一天（后续包材/瓶型替换，包材库存统计推进）：产后资材未退库
+8. 天天/每日隆｜包装箱效果图：未收到确认反馈，天天1L瓶标签已确认
+9. 新天地｜沈阳门店买赔：工厂赔付样品需寄回工厂做进一步分析研判
+
+【自补充】
+1. 凯辉茉莉椰子水9月22日生产，补每一天茉莉椰子水600箱</div></div></div><div style="margin-bottom:12px"><div class="text-meta">王焱 · 2026-09-23 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">4. 新天地（买赔 · 工厂品控）：工厂已确认他们赔付，需寄回问题产品</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 天天/每日隆（包装箱修改 · 跟踪客户确认）：已确认完毕
+2. 每一天（青瓜生产是否正常进行可完成）：已产完
+3. 每一天（包材库存统计跟进）：工厂未回料没有准确数据
+4. 新天地（买赔 · 工厂品控）：工厂已确认他们赔付，需寄回问题产品
+5. 小椰轻（生产）：待返工完成，预计24号完成
+6. 每一天（茉莉椰子水）：已产未入库
+7. 新工厂七方杯（质量问题及打检设备异常持续跟进或结论）：工厂在制定改造计划尚未有时间节点
+8. 跟进新工厂七方杯生产事宜（是否已全部完成）：待返工完成，预计24号完成
+9. Today（today茉莉椰子水（包装修改跟进））：客户未完成修改
+
+【自补充】
+1. 7-11抹茶香椰乳标签修改须9月24日完成提交
+2. 每一天、鲸灵惠选和邻几产后包材统计
+3. 【实际产出】客户：乐豆家 商品：1L椰子水 数量：2096箱 工厂：锦鸿
+4. 【实际产出】客户：today 商品：1L椰子水 数量：5033箱 工厂：锦鸿
+5. 【实际产出】客户：每一天 商品：420青瓜椰子水 数量：4541箱 工厂：华跃
+6. 见明细</div></div></div><div style="margin-bottom:12px"><div class="text-meta">高山 · 2026-09-23 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">3. 新天地（包装改版 · 委托方/条码/价格进展）：今年内正常不会安排生产，预计2027年上架商品。；7. 新天地（沈阳门店买赔后工厂端结论）：完结，工厂已反馈。</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 邻几（新版协议跟进）：客户反馈26年新版协议正常可在10月底前签完。
+2. 24客（合同跟进）：已盖章，完结。
+3. 新天地（包装改版 · 委托方/条码/价格进展）：今年内正常不会安排生产，预计2027年上架商品。
+4. 24客（包装箱修改待客户确认）：完结，客户已确认。
+5. 天天/每日隆（包装箱修改待客户确认）：完结，客户已确认。
+6. 每一天（青瓜生产完窗关注）：完结，已排产。
+7. 新天地（沈阳门店买赔后工厂端结论）：完结，工厂已反馈。
+8. 邻几（芜湖仓发货关注）：完结，已找到车
+9. Today（茉莉味椰子水｜设计稿进群审核）：客户设计修改中，在继续跟进。
+10. 每一天（风味椰子水发货）：完结，已发货。
+11. 京小盒（1L装椰子水发货）：完结，已发货。
+12. 超市发（发票及验收单邮寄是否已完成）：完结，已邮寄。
+13. 新天地（风味椰子水对账是否已完成）：完结，已核对账单无误。
+14. Today（原味椰子水对账是否已完成）：完结，已核对账单无误。
+15. Today（各系统（回款跟进/today进展））：待回款，跟进中。
+16. 每一天（对账）：完结，已安排部分回款。
+17. 安哒（跟进回款）：跟进中，短期内无法回款。
+18. 好邻居（尾款跟进）：对接人联系不上，电话未接，微信不通过。
+
+【自补充】
+1. Today武汉仓椰子水发货，家园椰子水发货，24客椰子水发货。</div></div></div><div style="margin-bottom:12px"><div class="text-meta">李荣华 · 2026-09-24 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">5. 新天地（包装改版 · 委托方/条码/价格，请关注进展）：已和高山沟通</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 邻几（请关注协议进展）：已沟通
+2. 24客（请关注合同进度）：收到此信息，我盯一下
+3. 抹茶椰乳（中试与后续生产交接）：已与王总沟通
+4. 711（抹茶香椰乳标签需要重新修改确认）：已交给客户确认
+5. 新天地（包装改版 · 委托方/条码/价格，请关注进展）：已和高山沟通
+6. 凯辉（新品需求与样品后续安排）：王总也让百旺达一起找样品
+7. 乐豆家（三方协议及商品推进）：我和王总再沟通一下
+8. 百望达（椰子水+产品报价）：今天再和工厂沟通一下
+
+【自补充】
+1. 重新做一份casajoy的销售计划和于涛沟通</div></div></div><div style="margin-bottom:12px"><div class="text-meta">王岩 · 2026-09-24 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">5. 新天地（包装改版 · 委托方/条码/价格，请关注后续进展）：由高山负责跟进， 及时反馈最终结果。</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 壹度（降价要求与供货价条款后续进展）：已沟通周总。博弈中。
+2. 邻几（请关注新合作模式与协议推进进展）：协议由李总负责督促完成即可。
+3. 24客（请关注合同进展）：由高山跟进并及时反馈结果。
+4. 抹茶椰乳（中试与后续生产交接）：29日中试。
+5. 新天地（包装改版 · 委托方/条码/价格，请关注后续进展）：由高山负责跟进， 及时反馈最终结果。
+6. 乐豆家（三方协议及商品推进）：由李总反馈最终结果。
+7. 凯辉（凯辉新品需求与提案，请关注样品最新进展）：三柠水，由百望达承担研发。已沟通凯辉及百望达。样品准备中。
+8. 安哒（欠款，已采取停货）：博弈中。
+9. 每一天（发每一天420ml 包材价格）：李总将成本告知，0.2元/个。在后续的沟通中，我会根据实际情况
+10. 邻几（结账（朱总））：跟进中。
+11. 美宜佳/新佳宜（美宜佳、新佳宜建立沟通，后续应跟进客情的关系维护）：此业务维持沟通。
+12. 折扣牛返利（核算支付与业务对接人安排）：跟进中。
+13. 悦来悦喜（工厂对接流程的责任人是否确认与明确交接）：等王焱回京后沟通交接。
+14. 健之佳（已生产产品交付）：节后跟进。随着促销协议一并跟进。
+15. 河南众旺（冰杯、抹茶椰子水、玉米汁提案，样品进展）：椰乳因质量问题未发样品，待中试后发样品。同步，杯装饮料已同步给我们样品，作为27年重点商品开发。
+16. 711（27年新品（711 同款冰棍、沙冰杯的开发，待推动））：彭倩冰棍未通过。此项目终止。
+17. 于涛总（材料对齐是否已完成）：已完成。由李总和龚总负责材料。
+
+【自补充】
+1. 关于好邻居欠款，节后由财务周经理上门催收
+2. 关于每一天整箱手提的事情，沟通的节奏是单批支持，后续看销量决定是否为常规供货方式。</div></div></div><div style="margin-bottom:12px"><div class="text-meta">高山 · 2026-09-24 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">新天地回款及发货沟通确认。</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 24客（合同跟进，请确保合同原件已返回）：工厂协议已寄出，诺好内部用印流程已走完，等纸质版到公司后，安排盖章后寄出。
+2. 每一天（青瓜生产完窗，请跟进后续）：每一天青瓜已排产，数量已确认，安排协调物流发出，此事项完结。
+3. Today（茉莉味椰子水｜设计稿进群审核）：客户还未修改完，跟进中，产品10月份底前可正常上架。
+4. 24客（椰子水发货，是否已完成）：已发货，完结。
+5. 邻几（合肥仓、芜湖仓发货，是否已完成）：已发货，完结。
+6. 安哒（跟进回款）：回款跟进中。
+7. 好邻居（尾款跟进）：回款跟进中。
+8. 邻几（合作协议返回）：协议由李总督促，我来负责落地，条款确认沟通中。
+
+【自补充】
+1. 每一天风味/原味椰子水发货，剩余包材统计，京小盒剩余椰子水包材统计。
+2. 各系统10月份订单陆续收集，邻几开票，新天地回款及发货沟通确认。</div></div></div><div style="margin-bottom:12px"><div class="text-meta">王焱 · 2026-09-24 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">3. 新天地（客诉染菌排查与赔付，跟进后续进展）：待业务联系客户样品寄回工厂</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 每一天（包材库存统计跟进）：已完成
+2. 小椰轻（生产是否完成）：已完成
+3. 新天地（客诉染菌排查与赔付，跟进后续进展）：待业务联系客户样品寄回工厂
+4. 7-11（抹茶香椰乳标签修改）：已完成
+5. 鲸灵惠选（产后包材统计）：已完成
+6. 邻几（产后包材统计）：已完成，预计生产完毕后约剩余368椰子水包装箱1000个。
+7. 每一天（茉莉椰子水补600箱是否完结）：已完成
+8. 新工厂七方杯（工厂改造持续跟进）：未完成。工厂在制定改造计划尚未有时间节点
+9. 跟进新工厂七方杯生产事宜（是否已全部完成）：已完成
+
+【自补充】
+1. 【生产中】客户：邻几 商品：368椰子水 数量：4000 工厂：锦鸿
+2. 【生产中】客户：凯辉 商品：368椰子水 数量：3000 工厂：锦鸿
+3. 见明细</div></div></div><div style="margin-bottom:12px"><div class="text-meta">王焱 · 2026-09-28 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">2. 新天地（买赔 · 工厂品控）：已反馈须问题产品寄回工厂；5. 新天地（客诉染菌排查与赔付，跟进后续进展）：与第二条重复</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 抹茶椰乳（中试与后续生产交接）：9月30日中试灌装不套标，中试样品重新送检营养成分表。送标签检测，检测合格后制版印刷后返工套标装箱
+2. 新天地（买赔 · 工厂品控）：已反馈须问题产品寄回工厂
+3. 新工厂七方杯（工厂改造持续跟进）：未完成。工厂在制定改造计划尚未有时间节点。
+4. Today（today茉莉椰子水（包装修改跟进））：已修改待审核
+5. 新天地（客诉染菌排查与赔付，跟进后续进展）：与第二条重复
+6. Today（today茉莉椰子水（包装修改跟进））：与第4条重复</div></div></div><div style="margin-bottom:12px"><div class="text-meta">王焱 · 2026-09-29 · 命中「新天地」</div><div style="margin-bottom:6px"><div style="font-size:11px;font-weight:600;color:#64748b">命中片段</div><div class="text-excerpt">5. 新天地（买赔 · 工厂品控 · 如有后续进展请跟进）：工厂未收到寄回的产品  【自补充】</div></div><div style="margin-top:4px"><div style="font-size:11px;cursor:pointer">▸ 原文全文</div><div style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:8px;border-radius:4px;max-height:360px;overflow:auto">【回复】
+1. 抹茶椰乳（中试与后续生产交接）：29号夜间中试灌装
+2. 健之佳（瓶盖发霉 · 退单寄回 · 后续跟进）：工厂尚未收到寄回产品
+3. 排产/生产结果（出口椰子水）：已经生产完成，9月30日报数
+4. 新工厂七方杯（工厂改造持续跟进）：未完成。工厂在制定改造计划尚未有时间节点。
+5. 新天地（买赔 · 工厂品控 · 如有后续进展请跟进）：工厂未收到寄回的产品
+
+【自补充】
+1. 10月份计划还未提供
+2. 10月20日出口椰子水需排产</div></div></div></div></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <dialog id="report-modal" class="report-modal" style="border:none;border-radius:12px;padding:0;max-width:min(960px,94vw);width:94vw">
+    <div style="padding:16px 18px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center">
+      <strong>月度复盘报告</strong>
+      <button type="button" onclick="document.getElementById('report-modal').close()" style="border:1px solid #cbd5e1;background:#fff;border-radius:6px;padding:4px 10px;cursor:pointer">关闭</button>
+    </div>
+    <div class="report-modal-body" style="padding:12px 18px 18px;max-height:min(80vh,820px);overflow:auto">
+      <p class="report-modal-lead">上方为 LLM 通盘复盘（客户端 / 供给端 / 履约端）；下方为结构化系统报告。</p>
+      <div class="report-section-title">AI 复盘</div>
+      <textarea class="report-modal-textarea report-ai-textarea" readonly>**2026年9月 AI 商业复盘报告**  
+（业务窗：2026-08-28 至 2026-09-30｜数据驱动 · 因果归因 · 主要矛盾优先）
+
+---
+
+### 一、客户端：交付顺延成系统性瓶颈，新天地与Today爆发式增长掩盖结构性风险  
+
+**客户状态进展与需求**  
+- **核心增量由“去库存+新品启动”双轮驱动**：新天地环比激增601.9%（¥344.7万），主因哈尔滨/长春仓加速消化前期积压椰子水；Today同比+375.3%（¥98.4万），源于茉莉风味椰子水完成标签设计、启动合作并进入首单履约，属典型“新品破冰带动订单回流”。  
+- **交付顺延覆盖全部TOP10已合作客户（除香港711外）**：新天地、Today、每一天、邻几、凯辉等共10家客户出现交期延迟，**根本原因高度集中于标签反复修改与包材确认滞后**——邻几、凯辉、24客、乐豆家均因标签设计多轮返工（金标替换、转曲图缺失、打样问题），导致工厂无法锁定最终版面，进而阻滞排产启动；叠加24客新增5000件1L订单需协调新工厂拼产，进一步加剧产能调度刚性。  
+
+**客户线索概述**  
+意向池持续扩容但转化节奏偏缓：悦来悦喜、京津冀美宜佳（冰杯）保持高频跟进，但40家未沟通意向客户中，含全家、中石化易捷、光明集团等战略级渠道，尚未建立有效触达路径，线索沉淀仍以被动响应为主。
+
+---
+
+### 二、供给端：标签—包材—排产链路断裂，成为交付最大堵点  
+
+**工厂排产与库存状态**  
+- **标签反复修改引发排产连锁延迟**：邻几、凯辉、24客、新天地四家客户同步推进1L/368ml标签改版，其中邻几两次修改、凯辉二次打样未闭环、24客协议条款变更与标签设计并行，直接导致华跃、锦鸿等主力工厂无法释放稳定排产窗口；**包材到位≠可投产**，因标签未终审，工厂拒绝启动印制，形成“包材静置→排产冻结→订单顺延”死循环。  
+- **大货消化与库存结构失衡并存**：新天地8.5万件历史库存加速出清支撑了当月高增长，但壹度、京小盒、家园便利等客户出库归零，反映部分SKU动销彻底停滞；乐豆家420ml虽完成检测报告并启动生产，但因三方合同法务审核未闭环，发货仍受制约。
+
+**发货情况**  
+- **运力组织能力不足暴露区域性短板**：邻几芜湖仓“找车难”非孤立事件，结合“有发货无单号约2笔”，指向物流协同机制薄弱——未建立区域仓运力预占机制，临时询价、比价、调度耗时过长，造成至少3家客户（邻几、乐豆家、集刻）存在发货延迟风险，影响区域到货时效及客户结算节奏。
+
+---
+
+### 三、履约端：染菌与霉变类质量事故频发，暴露品控前移失效  
+
+- **安哒1L装召回为本期最严重质量事件**：因疑似染菌导致2074瓶整批召回，工厂承担全部残损成本并承诺补货，直接损失超¥18万元，且引发客户对供应链稳定性信任动摇，回款至今未落地。  
+- **邻几、新天地、壹度、京小盒集中爆发微生物类客诉**：邻几368ml客诉1起、新天地沈阳门店上架异常（事由未写明）、壹度絮状物函告、京小盒霉变——四案均指向同一风险源：**椰子水灌装环节密封性或灭菌参数波动未被实时监控**，工厂未建立批次留样与快速溯源机制，导致问题定位滞后、赔付被动。  
+- **闭环进展分化明显**：安哒、邻几已闭环报损；新天地、壹度仍处样品寄回与染菌排查阶段；京小盒霉变尚未见工厂根因反馈，质量响应链条存在断层。
+
+---
+
+### 四、ERP操作员备注专项分析：手工干预频次低但信号敏感，返工/隔离类备注凸显过程失控  
+
+15笔库存调整仅净变动-15箱，规模微小，但**5条含“返工/隔离/报废”标签的备注集中出现在新天地、Today、邻几等高流量客户SKU上**，尤其锦鸿库新天地368ml单次调减16箱，指向终端验收或仓内质检触发异常处置；自然语言建项21条中20条为“生产/计划”，说明一线仍依赖人工补录驱动作业，系统计划刚性不足，而质量类手工备注正成为过程失控的隐性预警指标。
+
+---  
+**结语：9月是“高增长下的高风险月”**。营收环比+131.9%表象之下，是标签协同失灵、品控前移缺位、运力响应迟滞三大系统性卡点的集中显性化。下月攻坚必须聚焦：① 建立标签终审红黄灯机制（法务+设计+工厂三方会签）；② 对椰子水灌装线启动灭菌参数日监控与批次留样强制执行；③ 在华东/华北试点区域仓运力预占协议。增长不可持续，除非把交付确定性真正焊进流程里。</textarea>
+      <div class="report-section-title">结构化系统报告</div>
+      <textarea class="report-modal-textarea report-struct-textarea" readonly>═══════════════════════════════════════
+  诺好供应链 · 2026年9月客户分析复盘报告
+═══════════════════════════════════════
+
+一、财务经营概览
+  · 9月天财总出库额：¥8,750,264
+  · 较8月环比：131.9%
+  · 较去年同期同比：129.7%（去年9月 ¥3,808,945）
+  · 综合退货率：2.5%（9月账面无退货入账，符合财务准则）
+  · 天财净实发：209,827 箱，共 77 单
+
+二、物流与生产交付
+  · ERP 物流发货：153,809 箱，共 41 单，涉及 43 票
+  · 有发货无单号：凯辉 · 凯辉420茉莉椰子水（2132箱，09/24）；24客 · 24客1L椰子水（4989箱，09/25）
+  · 每箱平均物流成本：¥1.55（环比 -12.2%）
+  · 累计出货额：¥6,353,123（箱数×瓶数×供货价）
+  · 工厂暂存库存：145,979 箱
+  · 9月排产 20 次，按时履约率 0.0%，当前未完工 0 批
+  · 平均顺延 9.3 天，最长 18 天
+
+三、业财对账说明
+  · 单据级未匹配共 57 项：项目有财务无 9 项（5 客 · 20,919 箱），财务有项目无 48 笔（9 客 · 102,307 箱）。
+  · 客户月度箱数聚合差异：15 家客户待核对。
+  · 主要成因：ERP 系统2026年6月刚上线，无法覆盖此前历史建项；
+    以及业务建项与财务天财出库之间正常的跨月、在途处理时间差。
+  · 上述差异为「实物出库与账务出库流程时差」，单据正在有序对齐中。
+
+四、重点客户与商务备忘
+  · 9月出库 TOP5：
+    - 新天地（含多法人主体）：¥3,446,955
+    - 每一天（琼浆）：¥1,135,991
+    - 香港711（百望达）：¥1,124,515
+    - today今天：¥984,079
+    - 邻几：¥840,612
+
+  · 新天地：天财侧含哈尔滨、吉林等多法人主体，ERP 统一归集展示。
+  · 琼浆代运营：天财付款方为长沙琼浆科技，ERP 按 today/每一天/京小盒等
+    终端客户分别建项，建议以单据级核对为准。
+
+  · 【9月重大商务备忘 · 24客】
+    该客诉退货处于商务协商阶段，尚未进入财务冲账流程，
+    9月天财账面无记录符合财务准则，请管理层关注后续月度财务对冲进展。
+
+五、客群结构
+  · 已合作：22 家
+  · 意向但未合作：3 家
+  · 意向但未沟通：40 家
+
+六、9月操作员跟进概况
+  · 单超：21 篇汇报，提及 21 家客户
+  · 王焱：18 篇汇报，提及 15 家客户
+  · 高山：18 篇汇报，提及 16 家客户
+  · 李荣华：10 篇汇报，提及 13 家客户
+  · 王岩：10 篇汇报，提及 15 家客户
+
+───────────────────────────────────────
+本报告由 ERP 快照 + 天财明细 + 日周报/周会纪要自动聚合生成，
+供管理层复盘参考。
+───────────────────────────────────────</textarea>
+    </div>
+  </dialog>
+
   <script>
-    const D = JSON.parse(document.getElementById('data').textContent);
-    const money = (n) => '¥' + Math.round(n || 0).toLocaleString('zh-CN');
-    const num = (n, d=0) => Number(n || 0).toLocaleString('zh-CN', {maximumFractionDigits:d, minimumFractionDigits:d});
-    const pct = (x) => {
-      if (x === null || x === undefined || Number.isNaN(x)) return '—';
-      const v = x * 100;
-      const cls = v >= 0 ? 'up' : 'down';
-      return `<span class="${cls}">${v >= 0 ? '+' : ''}${v.toFixed(1)}%</span>`;
-    };
-
-    document.getElementById('title').textContent = `诺好供应链 · ${D.label}`;
-    document.getElementById('subtitle').textContent = '以 ERP 为业务主轴、天财为财务口径｜静态分享版';
-    document.getElementById('meta').innerHTML = [
-      `天财 ${D.acc}`,
-      `业务 ${D.biz}`,
-      `已合作 ${D.counts.cooperated}`,
-      `意向跟进中 ${D.counts.intent_active}`,
-      `意向未沟通 ${D.counts.intent_silent}`,
-    ].map(t => `<span class="chip">${t}</span>`).join('');
-    document.getElementById('foot-period').textContent = D.period;
-
-    const k = D.kpi;
-    const cards = [
-      {label:'9月天财总出库额', value: money(k.sales), sub:`环比 ${strip(pct(k.mom))} · 同比 ${strip(pct(k.yoy))}`},
-      {label:'ERP 活跃项目', value: `${k.erp_active_projects} 个`, sub:`合作新品 ${k.new_products} 个`},
-      {label:'ERP 物流发货', value: `${num(k.erp_ship_boxes)} 箱`, sub:`${k.erp_ship_tickets} 票 / ${k.erp_ship_docs} 单`},
-      {label:'累计发货额', value: money(k.ship_supply_amount), sub:`运费单价 ¥${num(k.freight_per_box,2)}（环比 ${strip(pct(k.freight_per_box_mom))}）`},
-      {label:'工厂暂存库存', value: `${num(k.inventory_boxes)} 箱`, sub: (k.inventory_by_factory||[]).map(f=>`${f.name} ${f.customers}客/${num(f.boxes)}箱`).join(' · ') || '—'},
-      {label:'综合退货率', value: strip(pct(k.return_rate)), sub:'账面口径'},
-    ];
-    function strip(html){ const t=document.createElement('div'); t.innerHTML=html; return t.textContent; }
-    document.getElementById('kpi').innerHTML = cards.map(c => `
-      <div class="card"><div class="label">${c.label}</div><div class="value">${c.value}</div><div class="sub">${c.sub}</div></div>
-    `).join('');
-
-    document.getElementById('monthly').innerHTML = marked.parse(D.monthly_ai || '_暂无月度 AI 报告_');
-
-    document.getElementById('coop-body').innerHTML = (D.cooperated_top||[]).map(r => `
-      <tr>
-        <td>${r.name}</td>
-        <td class="num">${money(r.sales)}</td>
-        <td class="num">${pct(r.yoy)}</td>
-        <td class="num">${pct(r.mom)}</td>
-        <td class="num">${money(r.ship_amt)}</td>
-        <td class="num">${money(r.freight)}</td>
-        <td><span class="tag">${r.status||'—'}</span></td>
-      </tr>`).join('');
-
-    document.getElementById('intent-body').innerHTML = (D.intent_active||[]).map(r => `
-      <tr><td>${r.name}</td><td class="num">${r.mentions}</td><td>${r.manager||'—'}</td></tr>
-    `).join('') || '<tr><td colspan="3">暂无</td></tr>';
-    document.getElementById('silent-note').textContent = `另有意向但未沟通 ${D.counts.intent_silent} 家（本页不展开名单）。`;
-
-    document.getElementById('op-body').innerHTML = (D.operators||[]).map(r => `
-      <tr><td>${r.name}</td><td class="num">${r.reports}</td><td class="num">${r.customers}</td></tr>
-    `).join('');
-
-    const items = (k.new_product_items||[]);
-    document.getElementById('inv-panel').innerHTML = `
-      <div class="label" style="color:var(--muted);font-size:12px;margin-bottom:8px">合作新品明细</div>
-      ${items.length ? `<ul style="margin:0;padding-left:1.1em;font-size:13px">${items.map(i=>`<li>${i}</li>`).join('')}</ul>` : '—'}
-    `;
+    const tabs = document.querySelectorAll('#segment-tabs .tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
   </script>
 </body>
 </html>
