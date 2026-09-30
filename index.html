@@ -1,14 +1,254 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>夕佳悦餐厅经营分析</title>
-    <script type="module" crossorigin src="/assets/index-XdHPw7it.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-C8mewpzz.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>诺好供应链 · 2026年9月客户复盘</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    :root {
+      --bg: #f3f5f8;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --blue: #1d4ed8;
+      --blue-soft: #eff6ff;
+      --ink: #1e3a5f;
+      --good: #047857;
+      --bad: #b91c1c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", system-ui, sans-serif;
+      background:
+        radial-gradient(1200px 500px at 10% -10%, #dbeafe 0%, transparent 55%),
+        radial-gradient(900px 400px at 100% 0%, #e2e8f0 0%, transparent 50%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 28px 18px 64px; }
+    header.hero {
+      background: linear-gradient(135deg, #16365c 0%, #1d4ed8 100%);
+      color: #fff;
+      border-radius: 18px;
+      padding: 28px 28px 24px;
+      box-shadow: 0 18px 40px rgba(29, 78, 216, 0.18);
+      margin-bottom: 22px;
+    }
+    header.hero .brand { font-size: 13px; letter-spacing: .08em; opacity: .85; text-transform: uppercase; }
+    header.hero h1 { margin: 8px 0 10px; font-size: clamp(24px, 4vw, 34px); font-weight: 700; }
+    header.hero p { margin: 0; opacity: .9; font-size: 14px; }
+    .meta { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px 16px 14px;
+      box-shadow: 0 1px 2px rgba(15,23,42,.04);
+    }
+    .card .label { color: var(--muted); font-size: 12px; }
+    .card .value { font-size: 24px; font-weight: 700; margin-top: 6px; letter-spacing: -.02em; }
+    .card .sub { margin-top: 6px; font-size: 12px; color: var(--muted); }
+    .up { color: var(--good); }
+    .down { color: var(--bad); }
+    section { margin-top: 18px; }
+    section h2 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    section h2::before {
+      content: "";
+      width: 4px; height: 14px; border-radius: 2px; background: var(--blue);
+    }
+    .panel { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; font-size: 12px; }
+    tr:last-child td { border-bottom: none; }
+    .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #334155;
+      font-size: 11px;
+    }
+    .md { font-size: 14px; color: #1e293b; }
+    .md h1,.md h2,.md h3 { margin: 1.1em 0 .45em; line-height: 1.35; }
+    .md h1 { font-size: 20px; } .md h2 { font-size: 17px; } .md h3 { font-size: 15px; }
+    .md p, .md li { margin: .35em 0; }
+    .md ul { padding-left: 1.2em; }
+    .md strong { color: #0f172a; }
+    .md hr { border: none; border-top: 1px solid var(--line); margin: 1.2em 0; }
+    .two {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 12px;
+    }
+    @media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
+    footer {
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+    .note {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="brand">NUOHAO SUPPLY CHAIN</div>
+      <h1 id="title">诺好供应链 · 客户复盘</h1>
+      <p id="subtitle"></p>
+      <div class="meta" id="meta"></div>
+    </header>
+
+    <div class="grid" id="kpi"></div>
+
+    <section>
+      <h2>月度 AI 复盘</h2>
+      <div class="panel md" id="monthly"></div>
+    </section>
+
+    <section>
+      <h2>已合作客户 TOP（按本月销售额）</h2>
+      <div class="panel" style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>客户</th>
+              <th class="num">销售额</th>
+              <th class="num">同比</th>
+              <th class="num">环比</th>
+              <th class="num">发货额</th>
+              <th class="num">总运费</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody id="coop-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="two">
+      <div>
+        <h2>意向但未合作</h2>
+        <div class="panel" style="overflow-x:auto">
+          <table>
+            <thead><tr><th>客户</th><th class="num">文本提及</th><th>负责人</th></tr></thead>
+            <tbody id="intent-body"></tbody>
+          </table>
+        </div>
+        <p class="note" id="silent-note"></p>
+      </div>
+      <div>
+        <h2>操作员动态</h2>
+        <div class="panel">
+          <table>
+            <thead><tr><th>操作员</th><th class="num">汇报条数</th><th class="num">提及客户</th></tr></thead>
+            <tbody id="op-body"></tbody>
+          </table>
+        </div>
+        <div class="panel" style="margin-top:12px" id="inv-panel"></div>
+      </div>
+    </section>
+
+    <footer>
+      由诺好客户分析复盘导出 · 静态页托管于 GitHub Pages · 数据期 <span id="foot-period"></span>
+    </footer>
+  </div>
+  <script id="data" type="application/json">{"period": "2026-09", "label": "2026年9月复盘", "acc": "2026-09-01～2026-09-30", "biz": "2026-08-28～2026-09-30", "generated_at": "2026-09-30", "kpi": {"sales": 8750263.629999999, "mom": 1.319341578007602, "yoy": 1.2972934951516317, "return_rate": 0.025496591167828958, "erp_active_projects": 21, "erp_ship_boxes": 153809.0, "erp_ship_docs": 41, "erp_ship_tickets": 43, "ship_supply_amount": 6353122.83, "freight_per_box": 1.550292050530203, "freight_per_box_mom": -0.1215029914902398, "inventory_boxes": 145979.0, "inventory_by_factory": [{"name": "锦鸿库", "customers": 13, "boxes": 97475}, {"name": "华跃库", "customers": 5, "boxes": 43951}, {"name": "多乐多库", "customers": 3, "boxes": 4553}], "new_products": 5, "new_product_items": ["乐豆家便利 · 乐豆家420ml椰子水", "凯辉便利 · 凯辉420茉莉椰子水", "每一天（琼浆） · 每一天420ml茉莉椰子水", "每一天（琼浆） · 每一天420ml青瓜椰子水", "集刻 · 集刻420ml青瓜椰子水"]}, "counts": {"cooperated": 22, "intent_active": 3, "intent_silent": 40}, "cooperated_top": [{"name": "新天地", "sales": 3446955.0, "yoy": null, "mom": 6.019314975558841, "boxes": 15400.0, "ship_amt": 602910.0, "freight": 30055.550000000003, "status": "去库存周期 · 交付顺延"}, {"name": "每一天（琼浆）", "sales": 1135991.29, "yoy": 1.695807965115218, "mom": 1.5570055443778243, "boxes": 40229.0, "ship_amt": 1752527.4, "freight": 62094.44, "status": "交付顺延"}, {"name": "香港711（百望达）", "sales": 1124514.6, "yoy": null, "mom": 2.729733333333334, "boxes": 27973.0, "ship_amt": 1124514.6, "freight": 21835.550000000003, "status": "稳步运行"}, {"name": "today今天", "sales": 984079.2, "yoy": 3.753372014166227, "mom": 2.9552227648158196, "boxes": 16431.0, "ship_amt": 727347.6, "freight": 31820.0, "status": "交付顺延"}, {"name": "邻几", "sales": 840612.43, "yoy": -0.49443007426583685, "mom": 0.14430129772684094, "boxes": 18250.0, "ship_amt": 681165.0, "freight": 22577.78, "status": "同比走弱 · 交付顺延"}, {"name": "凯辉便利", "sales": 301537.2, "yoy": 0.4888189419580368, "mom": 0.5797775696116584, "boxes": 2132.0, "ship_amt": 95940.0, "freight": 10363.33, "status": "交付顺延"}, {"name": "壹度", "sales": 211401.75, "yoy": 0.9397503303237172, "mom": -0.4384979013567972, "boxes": 5193.0, "ship_amt": 0.0, "freight": 0.0, "status": "销售走弱 · 交付顺延"}, {"name": "乐豆家便利", "sales": 205589.7, "yoy": -0.6613848456032713, "mom": -0.014584260502141445, "boxes": 9627.0, "ship_amt": 401017.65, "freight": 19357.78, "status": "同比走弱 · 交付顺延"}, {"name": "隆马特", "sales": 125152.5, "yoy": null, "mom": null, "boxes": 3034.0, "ship_amt": 0.0, "freight": 0.0, "status": "交付顺延"}, {"name": "京小盒（琼浆）", "sales": 106272.0, "yoy": -0.16713082163776447, "mom": -0.7015864089053004, "boxes": 5300.0, "ship_amt": 211845.0, "freight": 10333.34, "status": "销售走弱 · 交付顺延"}, {"name": "邢台天天", "sales": 0.0, "yoy": -1.0, "mom": null, "boxes": 0.0, "ship_amt": 0.0, "freight": 0.0, "status": "同比走弱"}, {"name": "折扣牛", "sales": 0.0, "yoy": null, "mom": null, "boxes": 0.0, "ship_amt": 0.0, "freight": 0.0, "status": "待观测"}, {"name": "集刻", "sales": 0.0, "yoy": -1.0, "mom": null, "boxes": 2484.0, "ship_amt": 113643.0, "freight": 9333.33, "status": "同比走弱"}, {"name": "汇宁", "sales": 0.0, "yoy": null, "mom": null, "boxes": 0.0, "ship_amt": 0.0, "freight": 0.0, "status": "待观测"}, {"name": "云南健之佳", "sales": 0.0, "yoy": null, "mom": -1.0, "boxes": 0.0, "ship_amt": 0.0, "freight": 0.0, "status": "销售走弱"}], "intent_active": [{"name": "华东美宜佳（椰子水）", "mentions": 11, "manager": "刘云"}, {"name": "悦来悦喜", "mentions": 8, "manager": "关乐乐"}, {"name": "新佳宜", "mentions": 2, "manager": "伍敏谊"}], "operators": [{"name": "单超", "reports": 21, "customers": 21}, {"name": "王焱", "reports": 18, "customers": 15}, {"name": "高山", "reports": 18, "customers": 16}, {"name": "李荣华", "reports": 10, "customers": 13}, {"name": "王岩", "reports": 10, "customers": 15}], "monthly_ai": "**2026年9月 AI 商业复盘报告**  \n（业务窗：2026-08-28 至 2026-09-30｜数据驱动 · 因果归因 · 主要矛盾优先）\n\n---\n\n### 一、客户端：交付顺延成系统性瓶颈，新天地与Today爆发式增长掩盖结构性风险  \n\n**客户状态进展与需求**  \n- **核心增量由“去库存+新品启动”双轮驱动**：新天地环比激增601.9%（¥344.7万），主因哈尔滨/长春仓加速消化前期积压椰子水；Today同比+375.3%（¥98.4万），源于茉莉风味椰子水完成标签设计、启动合作并进入首单履约，属典型“新品破冰带动订单回流”。  \n- **交付顺延覆盖全部TOP10已合作客户（除香港711外）**：新天地、Today、每一天、邻几、凯辉等共10家客户出现交期延迟，**根本原因高度集中于标签反复修改与包材确认滞后**——邻几、凯辉、24客、乐豆家均因标签设计多轮返工（金标替换、转曲图缺失、打样问题），导致工厂无法锁定最终版面，进而阻滞排产启动；叠加24客新增5000件1L订单需协调新工厂拼产，进一步加剧产能调度刚性。  \n\n**客户线索概述**  \n意向池持续扩容但转化节奏偏缓：悦来悦喜、京津冀美宜佳（冰杯）保持高频跟进，但40家未沟通意向客户中，含全家、中石化易捷、光明集团等战略级渠道，尚未建立有效触达路径，线索沉淀仍以被动响应为主。\n\n---\n\n### 二、供给端：标签—包材—排产链路断裂，成为交付最大堵点  \n\n**工厂排产与库存状态**  \n- **标签反复修改引发排产连锁延迟**：邻几、凯辉、24客、新天地四家客户同步推进1L/368ml标签改版，其中邻几两次修改、凯辉二次打样未闭环、24客协议条款变更与标签设计并行，直接导致华跃、锦鸿等主力工厂无法释放稳定排产窗口；**包材到位≠可投产**，因标签未终审，工厂拒绝启动印制，形成“包材静置→排产冻结→订单顺延”死循环。  \n- **大货消化与库存结构失衡并存**：新天地8.5万件历史库存加速出清支撑了当月高增长，但壹度、京小盒、家园便利等客户出库归零，反映部分SKU动销彻底停滞；乐豆家420ml虽完成检测报告并启动生产，但因三方合同法务审核未闭环，发货仍受制约。\n\n**发货情况**  \n- **运力组织能力不足暴露区域性短板**：邻几芜湖仓“找车难”非孤立事件，结合“有发货无单号约2笔”，指向物流协同机制薄弱——未建立区域仓运力预占机制，临时询价、比价、调度耗时过长，造成至少3家客户（邻几、乐豆家、集刻）存在发货延迟风险，影响区域到货时效及客户结算节奏。\n\n---\n\n### 三、履约端：染菌与霉变类质量事故频发，暴露品控前移失效  \n\n- **安哒1L装召回为本期最严重质量事件**：因疑似染菌导致2074瓶整批召回，工厂承担全部残损成本并承诺补货，直接损失超¥18万元，且引发客户对供应链稳定性信任动摇，回款至今未落地。  \n- **邻几、新天地、壹度、京小盒集中爆发微生物类客诉**：邻几368ml客诉1起、新天地沈阳门店上架异常（事由未写明）、壹度絮状物函告、京小盒霉变——四案均指向同一风险源：**椰子水灌装环节密封性或灭菌参数波动未被实时监控**，工厂未建立批次留样与快速溯源机制，导致问题定位滞后、赔付被动。  \n- **闭环进展分化明显**：安哒、邻几已闭环报损；新天地、壹度仍处样品寄回与染菌排查阶段；京小盒霉变尚未见工厂根因反馈，质量响应链条存在断层。\n\n---\n\n### 四、ERP操作员备注专项分析：手工干预频次低但信号敏感，返工/隔离类备注凸显过程失控  \n\n15笔库存调整仅净变动-15箱，规模微小，但**5条含“返工/隔离/报废”标签的备注集中出现在新天地、Today、邻几等高流量客户SKU上**，尤其锦鸿库新天地368ml单次调减16箱，指向终端验收或仓内质检触发异常处置；自然语言建项21条中20条为“生产/计划”，说明一线仍依赖人工补录驱动作业，系统计划刚性不足，而质量类手工备注正成为过程失控的隐性预警指标。\n\n---  \n**结语：9月是“高增长下的高风险月”**。营收环比+131.9%表象之下，是标签协同失灵、品控前移缺位、运力响应迟滞三大系统性卡点的集中显性化。下月攻坚必须聚焦：① 建立标签终审红黄灯机制（法务+设计+工厂三方会签）；② 对椰子水灌装线启动灭菌参数日监控与批次留样强制执行；③ 在华东/华北试点区域仓运力预占协议。增长不可持续，除非把交付确定性真正焊进流程里。"}</script>
+  <script>
+    const D = JSON.parse(document.getElementById('data').textContent);
+    const money = (n) => '¥' + Math.round(n || 0).toLocaleString('zh-CN');
+    const num = (n, d=0) => Number(n || 0).toLocaleString('zh-CN', {maximumFractionDigits:d, minimumFractionDigits:d});
+    const pct = (x) => {
+      if (x === null || x === undefined || Number.isNaN(x)) return '—';
+      const v = x * 100;
+      const cls = v >= 0 ? 'up' : 'down';
+      return `<span class="${cls}">${v >= 0 ? '+' : ''}${v.toFixed(1)}%</span>`;
+    };
+
+    document.getElementById('title').textContent = `诺好供应链 · ${D.label}`;
+    document.getElementById('subtitle').textContent = '以 ERP 为业务主轴、天财为财务口径｜静态分享版';
+    document.getElementById('meta').innerHTML = [
+      `天财 ${D.acc}`,
+      `业务 ${D.biz}`,
+      `已合作 ${D.counts.cooperated}`,
+      `意向跟进中 ${D.counts.intent_active}`,
+      `意向未沟通 ${D.counts.intent_silent}`,
+    ].map(t => `<span class="chip">${t}</span>`).join('');
+    document.getElementById('foot-period').textContent = D.period;
+
+    const k = D.kpi;
+    const cards = [
+      {label:'9月天财总出库额', value: money(k.sales), sub:`环比 ${strip(pct(k.mom))} · 同比 ${strip(pct(k.yoy))}`},
+      {label:'ERP 活跃项目', value: `${k.erp_active_projects} 个`, sub:`合作新品 ${k.new_products} 个`},
+      {label:'ERP 物流发货', value: `${num(k.erp_ship_boxes)} 箱`, sub:`${k.erp_ship_tickets} 票 / ${k.erp_ship_docs} 单`},
+      {label:'累计发货额', value: money(k.ship_supply_amount), sub:`运费单价 ¥${num(k.freight_per_box,2)}（环比 ${strip(pct(k.freight_per_box_mom))}）`},
+      {label:'工厂暂存库存', value: `${num(k.inventory_boxes)} 箱`, sub: (k.inventory_by_factory||[]).map(f=>`${f.name} ${f.customers}客/${num(f.boxes)}箱`).join(' · ') || '—'},
+      {label:'综合退货率', value: strip(pct(k.return_rate)), sub:'账面口径'},
+    ];
+    function strip(html){ const t=document.createElement('div'); t.innerHTML=html; return t.textContent; }
+    document.getElementById('kpi').innerHTML = cards.map(c => `
+      <div class="card"><div class="label">${c.label}</div><div class="value">${c.value}</div><div class="sub">${c.sub}</div></div>
+    `).join('');
+
+    document.getElementById('monthly').innerHTML = marked.parse(D.monthly_ai || '_暂无月度 AI 报告_');
+
+    document.getElementById('coop-body').innerHTML = (D.cooperated_top||[]).map(r => `
+      <tr>
+        <td>${r.name}</td>
+        <td class="num">${money(r.sales)}</td>
+        <td class="num">${pct(r.yoy)}</td>
+        <td class="num">${pct(r.mom)}</td>
+        <td class="num">${money(r.ship_amt)}</td>
+        <td class="num">${money(r.freight)}</td>
+        <td><span class="tag">${r.status||'—'}</span></td>
+      </tr>`).join('');
+
+    document.getElementById('intent-body').innerHTML = (D.intent_active||[]).map(r => `
+      <tr><td>${r.name}</td><td class="num">${r.mentions}</td><td>${r.manager||'—'}</td></tr>
+    `).join('') || '<tr><td colspan="3">暂无</td></tr>';
+    document.getElementById('silent-note').textContent = `另有意向但未沟通 ${D.counts.intent_silent} 家（本页不展开名单）。`;
+
+    document.getElementById('op-body').innerHTML = (D.operators||[]).map(r => `
+      <tr><td>${r.name}</td><td class="num">${r.reports}</td><td class="num">${r.customers}</td></tr>
+    `).join('');
+
+    const items = (k.new_product_items||[]);
+    document.getElementById('inv-panel').innerHTML = `
+      <div class="label" style="color:var(--muted);font-size:12px;margin-bottom:8px">合作新品明细</div>
+      ${items.length ? `<ul style="margin:0;padding-left:1.1em;font-size:13px">${items.map(i=>`<li>${i}</li>`).join('')}</ul>` : '—'}
+    `;
+  </script>
+</body>
 </html>
